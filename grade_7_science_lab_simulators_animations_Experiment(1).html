@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experimental Odyssey | Grade 7 Science Virtual Lab</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              900: '#134e4a',
+            },
+            bio: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+            },
+            physics: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .pulse-glow {
+      animation: pulseGlow 2s infinite alternate;
+    }
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 5px rgba(20, 184, 166, 0.4); }
+      100% { box-shadow: 0 0 20px rgba(20, 184, 166, 0.8); }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+
+  <!-- TOP HEADER / NAVIGATION -->
+  <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-400 to-emerald-500 flex items-center justify-center text-slate-900 font-extrabold font-display text-xl shadow-lg">
+            EO
+          </div>
+          <div>
+            <h1 class="font-display font-bold text-lg leading-tight tracking-wide text-white">EXPERIMENTAL ODYSSEY</h1>
+            <p class="text-xs text-teal-300 font-medium">Interactive Science Lab • Grade 7</p>
+          </div>
+        </div>
+
+        <!-- MAIN TABS NAVIGATION -->
+        <nav class="flex space-x-1 sm:space-x-2 bg-slate-800 p-1 rounded-xl">
+          <button id="nav-exp1" onclick="switchMainTab('exp1')" class="px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center space-x-2 bg-teal-600 text-white shadow">
+            <i class="fa-solid fa-leaf"></i>
+            <span class="hidden sm:inline">Exp 01:</span>
+            <span>Nutrition in Plants</span>
+          </button>
+          <button id="nav-exp9" onclick="switchMainTab('exp9')" class="px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-700">
+            <i class="fa-solid fa-stopwatch"></i>
+            <span class="hidden sm:inline">Exp 09:</span>
+            <span>Motion & Time</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- SUB-HEADER / MODE SELECTOR (SIMULATOR vs ANIMATION vs CONCEPT) -->
+  <div class="bg-white border-b border-slate-200 shadow-sm sticky top-16 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center py-2.5 gap-2">
+      <!-- Title Badge -->
+      <div class="flex items-center space-x-2">
+        <span id="active-exp-badge" class="px-2.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300">
+          Life Science
+        </span>
+        <span id="active-exp-title" class="font-display font-bold text-slate-800 text-sm sm:text-base">
+          Stomata & Moll's Half-Leaf Experiment
+        </span>
+      </div>
+
+      <!-- Mode Buttons -->
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <button id="mode-sim" onclick="switchMode('sim')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 bg-teal-50 text-teal-700 border border-teal-300">
+          <i class="fa-solid fa-flask"></i>
+          <span>Interactive Simulator</span>
+        </button>
+        <button id="mode-anim" onclick="switchMode('anim')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 text-slate-600 hover:bg-slate-100">
+          <i class="fa-solid fa-film"></i>
+          <span>Animated Odyssey</span>
+        </button>
+        <button id="mode-theory" onclick="switchMode('theory')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 text-slate-600 hover:bg-slate-100">
+          <i class="fa-solid fa-book-open"></i>
+          <span>Theory & Quiz</span>
+        </button>
+
+        <!-- Global Audio Control Button -->
+        <button id="audio-toggle-btn" onclick="toggleGlobalAudio()" class="ml-2 p-2 rounded-lg bg-amber-100 text-amber-800 hover:bg-amber-200 transition-colors" title="Read Aloud Page Summary">
+          <i id="audio-icon" class="fa-solid fa-volume-high"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ==================================================================================== -->
+    <!-- EXPERIMENT 01: NUTRITION IN PLANTS -->
+    <!-- ==================================================================================== -->
+    <div id="exp1-container" class="space-y-6">
+
+      <!-- MODE 1: EXPERIMENT 1 SIMULATOR -->
+      <div id="exp1-sim" class="space-y-6">
+        <!-- Top Info Banner -->
+        <div class="bg-gradient-to-r from-teal-900 to-emerald-900 text-white rounded-2xl p-5 shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h2 class="font-display text-xl font-bold text-teal-200 flex items-center gap-2">
+              <i class="fa-solid fa-microscope text-emerald-400"></i>
+              Moll's Half-Leaf & Stomata Virtual Station
+            </h2>
+            <p class="text-sm text-teal-100/90 mt-1">
+              Investigate the necessity of Carbon Dioxide ($CO_2$) for photosynthesis and examine stomatal guard cells under varying conditions.
+            </p>
+          </div>
+          <button onclick="readText('Welcome to Experiment 1: Nutrition in Plants. Configure the experimental setup on the left panel, then run the iodine starch test to see which part of the leaf synthesizes starch.')" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-bold text-xs px-3 py-2 rounded-xl flex items-center space-x-1.5 shadow transition">
+            <i class="fa-solid fa-volume-high"></i>
+            <span>Audio Guide</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Controls Panel (Left) -->
+          <div class="lg:col-span-4 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-5">
+            <h3 class="font-display font-bold text-base text-slate-900 border-b pb-2 flex items-center justify-between">
+              <span><i class="fa-solid fa-sliders text-teal-600 mr-2"></i>Setup Controls</span>
+              <button onclick="resetExp1()" class="text-xs text-teal-600 hover:text-teal-800 font-medium">Reset</button>
+            </h3>
+
+            <!-- Control 1: Bottle KOH Solution -->
+            <div class="space-y-2">
+              <label class="text-xs font-bold uppercase text-slate-600 tracking-wider flex items-center justify-between">
+                <span>Inside Bottle Solution</span>
+                <span id="label-koh-status" class="text-teal-700 bg-teal-50 px-2 py-0.5 rounded text-[10px] font-bold">KOH Solution</span>
+              </label>
+              <select id="exp1-koh-select" onchange="updateExp1Sim()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm font-medium focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                <option value="koh" selected>KOH Solution (Absorbs CO₂)</option>
+                <option value="water">Plain Water (CO₂ Available)</option>
+              </select>
+              <p class="text-[11px] text-slate-500">KOH (Potassium Hydroxide) chemically absorbs all CO₂ inside the sealed bottle.</p>
+            </div>
+
+            <!-- Control 2: Sunlight Exposure -->
+            <div class="space-y-2">
+              <label class="text-xs font-bold uppercase text-slate-600 tracking-wider flex items-center justify-between">
+                <span>Light Exposure</span>
+                <span id="label-light-status" class="text-amber-700 bg-amber-50 px-2 py-0.5 rounded text-[10px] font-bold">Bright Sunlight</span>
+              </label>
+              <select id="exp1-light-select" onchange="updateExp1Sim()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm font-medium focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                <option value="sunlight" selected>4-5 Hours Bright Sunlight</option>
+                <option value="dark">Kept in Dark Room (0 Light)</option>
+              </select>
+            </div>
+
+            <!-- Control 3: Pre-Destarching -->
+            <div class="space-y-2">
+              <label class="text-xs font-bold uppercase text-slate-600 tracking-wider flex items-center justify-between">
+                <span>Pre-treatment</span>
+                <span id="label-destarch-status" class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[10px] font-bold">Destarched</span>
+              </label>
+              <select id="exp1-destarch-select" onchange="updateExp1Sim()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm font-medium focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                <option value="yes" selected>Destarched (48-72h in Dark)</option>
+                <option value="no">Not Destarched (Contains Starch)</option>
+              </select>
+            </div>
+
+            <!-- Stomata Microscope Lens Switch -->
+            <div class="pt-2 border-t border-slate-100">
+              <label class="text-xs font-bold uppercase text-slate-600 tracking-wider block mb-2">Microscope View Lens</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button id="btn-mag-10x" onclick="setStomataMag(10)" class="py-2 px-3 rounded-xl border border-teal-600 bg-teal-600 text-white font-bold text-xs flex items-center justify-center space-x-1">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <span>10x Overview</span>
+                </button>
+                <button id="btn-mag-40x" onclick="setStomataMag(40)" class="py-2 px-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-700 font-bold text-xs flex items-center justify-center space-x-1 hover:bg-slate-100">
+                  <i class="fa-solid fa-magnifying-glass-plus"></i>
+                  <span>40x High Power</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Action Button: Run Iodine Test -->
+            <div class="pt-2">
+              <button onclick="runIodineTestExp1()" class="w-full bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 text-sm">
+                <i class="fa-solid fa-vial"></i>
+                <span>Perform Iodine Starch Test</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Canvas & Visualization Area (Right) -->
+          <div class="lg:col-span-8 space-y-6">
+            <!-- Dynamic Main Canvas Container -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 relative overflow-hidden">
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                  <i class="fa-solid fa-vial-circle-check text-teal-600"></i>
+                  Apparatus Visualisation: Moll's Half-Leaf Setup
+                </span>
+                <span id="canvas-status-tag" class="text-xs px-2.5 py-1 rounded-full font-bold bg-amber-100 text-amber-800">
+                  Sunlight Active
+                </span>
+              </div>
+
+              <!-- Main Canvas -->
+              <canvas id="exp1-canvas" width="700" height="380" class="w-full h-auto bg-slate-900 rounded-xl border border-slate-800 shadow-inner block"></canvas>
+
+              <!-- Microscope Inset Canvas (Overlay Bottom Right) -->
+              <div class="mt-4 sm:mt-0 sm:absolute sm:bottom-6 sm:right-6 bg-slate-800/90 border-2 border-teal-500 rounded-2xl p-2 shadow-2xl backdrop-blur-md max-w-[220px]">
+                <div class="text-[10px] font-bold text-teal-300 uppercase mb-1 flex items-center justify-between">
+                  <span>Epidermal Stomata View</span>
+                  <span id="stomata-mag-label" class="text-white">10x</span>
+                </div>
+                <canvas id="exp1-stomata-canvas" width="200" height="150" class="w-full rounded-lg bg-black block"></canvas>
+                <p id="stomata-desc" class="text-[10px] text-slate-300 mt-1 leading-tight text-center font-medium">
+                  Guard cells swollen; pore OPEN in sunlight.
+                </p>
+              </div>
+            </div>
+
+            <!-- Dynamic Result Table Card -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+              <h3 class="font-display font-bold text-slate-900 text-sm flex items-center justify-between">
+                <span><i class="fa-solid fa-table-cells text-emerald-600 mr-2"></i>Observation Data Log</span>
+                <span class="text-xs text-slate-500">Moll's Half-Leaf Comparison</span>
+              </h3>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-xs text-left text-slate-700">
+                  <thead class="text-[11px] uppercase bg-slate-100 text-slate-600 font-bold border-b">
+                    <tr>
+                      <th class="p-2.5 rounded-l-lg">Tested Leaf Region</th>
+                      <th class="p-2.5">CO₂ Environment</th>
+                      <th class="p-2.5">Iodine Reaction Color</th>
+                      <th class="p-2.5 rounded-r-lg">Scientific Inference</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 font-medium">
+                    <tr class="hover:bg-slate-50">
+                      <td class="p-2.5 font-bold text-slate-900 flex items-center space-x-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-teal-500 inline-block"></span>
+                        <span>Leaf Inside Bottle</span>
+                      </td>
+                      <td id="res-inside-co2" class="p-2.5 text-rose-700 font-semibold">Absorbed by KOH (No CO₂)</td>
+                      <td id="res-inside-color" class="p-2.5 font-bold text-amber-700">Brown-Yellow (No Starch)</td>
+                      <td id="res-inside-infer" class="p-2.5 text-slate-600">Photosynthesis failed without CO₂</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50">
+                      <td class="p-2.5 font-bold text-slate-900 flex items-center space-x-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span>
+                        <span>Leaf Outside Bottle</span>
+                      </td>
+                      <td id="res-outside-co2" class="p-2.5 text-emerald-700 font-semibold">Exposed to Ambient Air</td>
+                      <td id="res-outside-color" class="p-2.5 font-bold text-indigo-900">Blue-Black (Starch Present)</td>
+                      <td id="res-outside-infer" class="p-2.5 text-slate-600">Photosynthesis occurred using atmospheric CO₂</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded-r-xl text-xs text-emerald-900 font-medium leading-relaxed">
+                <strong>Scientific Conclusion:</strong> Carbon dioxide is an essential raw material for photosynthesis in green plants, entering the leaf via epidermal stomata.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODE 2: EXPERIMENT 1 ANIMATED ODYSSEY -->
+      <div id="exp1-anim" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-4">
+            <div>
+              <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">Guided Interactive Story</span>
+              <h2 class="font-display font-extrabold text-2xl text-slate-900">Step-by-Step Photosynthesis Journey</h2>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="playExp1AnimVoice()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs px-3 py-2 rounded-xl flex items-center space-x-1.5">
+                <i class="fa-solid fa-volume-high"></i>
+                <span>Narrate Scene</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Scene Visual Box -->
+          <div id="exp1-anim-art" class="h-80 sm:h-96 rounded-2xl relative overflow-hidden bg-gradient-to-b from-sky-300 via-sky-100 to-emerald-200 flex items-center justify-center border border-sky-200 shadow-inner">
+            <!-- Sun Element -->
+            <div id="exp1-anim-sun" class="absolute top-6 right-8 w-16 h-16 rounded-full bg-amber-400 shadow-[0_0_40px_rgba(251,191,36,0.8)] animate-pulse"></div>
+            
+            <!-- Center Graphic Element -->
+            <div id="exp1-anim-center-icon" class="text-8xl transition-all duration-500 drop-shadow-xl transform hover:scale-105">
+              🌱
+            </div>
+
+            <!-- Interactive Particle Elements -->
+            <div id="exp1-anim-particles" class="absolute inset-0 pointer-events-none">
+              <!-- Animated dynamically in JS -->
+            </div>
+
+            <!-- Dialogue / Information Overlay Badge -->
+            <div class="absolute bottom-4 left-4 right-4 bg-slate-900/80 backdrop-blur-md text-white p-4 rounded-xl border border-white/20 shadow-xl">
+              <span id="exp1-anim-step-badge" class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-teal-500 text-slate-900 mb-1 inline-block">
+                Step 1 of 5
+              </span>
+              <h4 id="exp1-anim-title" class="font-display font-bold text-base text-teal-200">1. Destarching the Plant</h4>
+              <p id="exp1-anim-desc" class="text-xs text-slate-200 mt-1 leading-relaxed">
+                The potted plant is placed in a dark room for 48 to 72 hours. Without light, photosynthesis stops and the plant consumes all existing starch stored in its leaves.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step Progress Controls -->
+          <div class="space-y-3">
+            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+              <div id="exp1-anim-progress" class="bg-teal-500 h-full w-1/5 transition-all duration-300"></div>
+            </div>
+
+            <div class="flex justify-between items-center gap-2">
+              <button onclick="prevExp1AnimStep()" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-100 flex items-center space-x-1">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Previous Step</span>
+              </button>
+              <div id="exp1-anim-step-dots" class="flex space-x-1.5">
+                <!-- Dots populated by JS -->
+              </div>
+              <button onclick="nextExp1AnimStep()" class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow flex items-center space-x-1">
+                <span>Next Step</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODE 3: EXPERIMENT 1 THEORY & QUIZ -->
+      <div id="exp1-theory" class="hidden space-y-6">
+        <!-- Theory Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+            <div class="w-8 h-8 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center font-bold">
+              <i class="fa-solid fa-book"></i>
+            </div>
+            <h3 class="font-display font-bold text-slate-900 text-base">Key Concepts & Reactions</h3>
+            <ul class="text-xs text-slate-600 space-y-2 list-disc pl-4 leading-relaxed">
+              <li><strong>Photosynthesis Equation:</strong> Carbon dioxide + Water $\xrightarrow{\text{Sunlight, Chlorophyll}}$ Glucose + Oxygen.</li>
+              <li><strong>Stomata:</strong> Microscopic pores located mainly on the lower epidermis of leaves, flanked by two bean-shaped <strong>guard cells</strong>.</li>
+              <li><strong>Role of KOH:</strong> Potassium hydroxide chemically reacts with carbon dioxide ($KOH + CO_2 \rightarrow K_2CO_3 + H_2O$), making it unavailable inside the sealed bottle.</li>
+              <li><strong>Iodine Test:</strong> Iodine solution reacts with starch to produce a dark <strong>blue-black</strong> complex. Unreacted areas stay brown-yellow.</li>
+            </ul>
+          </div>
+
+          <div class="bg-amber-50 rounded-2xl p-5 border border-amber-200 shadow-sm space-y-3">
+            <div class="w-8 h-8 rounded-lg bg-amber-200 text-amber-800 flex items-center justify-center font-bold">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="font-display font-bold text-amber-900 text-base">Safety First (Golden Rules)</h3>
+            <ul class="text-xs text-amber-900/90 space-y-2 list-disc pl-4 leading-relaxed">
+              <li><strong>KOH Handling:</strong> KOH is a strong corrosive alkali. Wear safety goggles and gloves. Teacher supervision required.</li>
+              <li><strong>Alcohol Flammability:</strong> Never heat ethanol/alcohol directly over a open Bunsen flame! Always use a boiling water bath.</li>
+              <li><strong>Leaf Handling:</strong> Handle delicate leaves with forceps to prevent breaking during decolorization.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Interactive Quiz Box -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
+          <div class="flex justify-between items-center border-b pb-3">
+            <h3 class="font-display font-bold text-slate-900 text-lg flex items-center gap-2">
+              <i class="fa-solid fa-graduation-cap text-teal-600"></i>
+              Competency Assessment: Experiment 01
+            </h3>
+            <span id="exp1-quiz-score" class="text-xs font-bold px-3 py-1 bg-slate-100 rounded-full text-slate-700">
+              Score: 0/3
+            </span>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Q1 -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+              <p class="text-xs font-bold text-slate-800">Q1. Why is the potted plant kept in a dark room for 48-72 hours before the experiment?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <button onclick="checkExp1Quiz(1, 'a', this)" class="q1-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">A) To kill all leaf stomata</button>
+                <button onclick="checkExp1Quiz(1, 'b', this)" class="q1-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium" data-correct="true">B) To destarch the leaves completely</button>
+                <button onclick="checkExp1Quiz(1, 'c', this)" class="q1-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">C) To absorb potassium hydroxide</button>
+                <button onclick="checkExp1Quiz(1, 'd', this)" class="q1-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">D) To make leaves turn yellow</button>
+              </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+              <p class="text-xs font-bold text-slate-800">Q2. What is the function of Potassium Hydroxide (KOH) in Moll's half-leaf experiment?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <button onclick="checkExp1Quiz(2, 'a', this)" class="q2-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium" data-correct="true">A) To absorb Carbon Dioxide (CO₂)</button>
+                <button onclick="checkExp1Quiz(2, 'b', this)" class="q2-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">B) To supply Oxygen to the leaf</button>
+                <button onclick="checkExp1Quiz(2, 'c', this)" class="q2-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">C) To bleach chlorophyll</button>
+                <button onclick="checkExp1Quiz(2, 'd', this)" class="q2-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">D) To measure temperature changes</button>
+              </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+              <p class="text-xs font-bold text-slate-800">Q3. Stomatal pores open when the surrounding guard cells:</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <button onclick="checkExp1Quiz(3, 'a', this)" class="q3-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">A) Lose water and shrink</button>
+                <button onclick="checkExp1Quiz(3, 'b', this)" class="q3-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium" data-correct="true">B) Take in water and swell (become turgid)</button>
+                <button onclick="checkExp1Quiz(3, 'c', this)" class="q3-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">C) Lose all chlorophyll</button>
+                <button onclick="checkExp1Quiz(3, 'd', this)" class="q3-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">D) Are exposed to iodine</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================================================================================== -->
+    <!-- EXPERIMENT 09: MOTION & TIME -->
+    <!-- ==================================================================================== -->
+    <div id="exp9-container" class="hidden space-y-6">
+
+      <!-- MODE 1: EXPERIMENT 9 SIMULATOR -->
+      <div id="exp9-sim" class="space-y-6">
+        <!-- Top Info Banner -->
+        <div class="bg-gradient-to-r from-sky-900 to-blue-900 text-white rounded-2xl p-5 shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h2 class="font-display text-xl font-bold text-sky-200 flex items-center gap-2">
+              <i class="fa-solid fa-stopwatch text-sky-400"></i>
+              Simple Pendulum & Motion Lab
+            </h2>
+            <p class="text-sm text-sky-100/90 mt-1">
+              Measure oscillation time periods ($T = 2\pi\sqrt{L/g}$) and plot interactive Distance-Time graphs for walking vs running.
+            </p>
+          </div>
+          <button onclick="readText('Welcome to Experiment 9: Motion and Time. Use the pendulum controls to release the bob and record 20 oscillations. Next, explore the distance time graph generator below.')" class="bg-sky-400 hover:bg-sky-500 text-slate-900 font-bold text-xs px-3 py-2 rounded-xl flex items-center space-x-1.5 shadow transition">
+            <i class="fa-solid fa-volume-high"></i>
+            <span>Audio Guide</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Left Controls Column -->
+          <div class="lg:col-span-4 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-5">
+            <h3 class="font-display font-bold text-base text-slate-900 border-b pb-2 flex items-center justify-between">
+              <span><i class="fa-solid fa-sliders text-sky-600 mr-2"></i>Pendulum Controls</span>
+              <button onclick="resetExp9Pendulum()" class="text-xs text-sky-600 hover:text-sky-800 font-medium">Reset</button>
+            </h3>
+
+            <!-- Preset Buttons for Lab Manual Lengths -->
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold uppercase text-slate-600 tracking-wider block">Standard Manual Presets</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="setPendulumLength(80)" class="py-2 px-3 rounded-xl border border-sky-300 bg-sky-50 text-sky-800 font-bold text-xs hover:bg-sky-100 transition">
+                  Length = 80 cm
+                </button>
+                <button onclick="setPendulumLength(100)" class="py-2 px-3 rounded-xl border border-sky-300 bg-sky-50 text-sky-800 font-bold text-xs hover:bg-sky-100 transition">
+                  Length = 100 cm
+                </button>
+              </div>
+            </div>
+
+            <!-- Length Slider -->
+            <div class="space-y-2">
+              <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+                <span>Thread Length ($L$):</span>
+                <span id="val-length" class="text-sky-600 font-extrabold text-sm">80 cm</span>
+              </div>
+              <input id="slider-length" type="range" min="40" max="120" value="80" step="5" oninput="onPendulumLengthChange(this.value)" class="w-full accent-sky-600 cursor-pointer">
+            </div>
+
+            <!-- Displacement Angle Slider -->
+            <div class="space-y-2">
+              <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+                <span>Release Angle ($\theta$):</span>
+                <span id="val-angle" class="text-sky-600 font-extrabold text-sm">10°</span>
+              </div>
+              <input id="slider-angle" type="range" min="5" max="15" value="10" step="1" oninput="onPendulumAngleChange(this.value)" class="w-full accent-sky-600 cursor-pointer">
+              <p class="text-[10px] text-slate-500">Keep displacement small (&lt; 15°) for simple harmonic motion.</p>
+            </div>
+
+            <!-- Interactive Action Buttons -->
+            <div class="space-y-2 pt-2">
+              <button id="btn-pendulum-start" onclick="togglePendulumSwing()" class="w-full bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 text-sm">
+                <i id="icon-pendulum-play" class="fa-solid fa-play"></i>
+                <span id="text-pendulum-play">Release & Start Timer</span>
+              </button>
+              <button onclick="logPendulumTrial()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 px-4 rounded-xl transition text-xs border border-slate-300 flex items-center justify-center space-x-1.5">
+                <i class="fa-solid fa-bookmark text-sky-600"></i>
+                <span>Record Trial Data</span>
+              </button>
+            </div>
+
+            <!-- Live Digital Stopwatch Card -->
+            <div class="bg-slate-900 rounded-2xl p-4 text-white space-y-2 border border-slate-800">
+              <div class="text-[10px] font-bold text-sky-400 uppercase tracking-widest flex items-center justify-between">
+                <span>Digital Stopwatch</span>
+                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+              </div>
+              <div id="stopwatch-display" class="font-mono text-3xl font-extrabold text-center tracking-wider text-sky-300 py-1">
+                00:00.00
+              </div>
+              <div class="flex justify-between items-center text-xs text-slate-300 pt-1 border-t border-slate-800">
+                <span>Oscillation Count:</span>
+                <span id="oscillation-count" class="font-bold text-amber-400 font-mono text-sm">0 / 20</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Pendulum Canvas & Data Log -->
+          <div class="lg:col-span-8 space-y-6">
+            <!-- Pendulum Visual Canvas -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 relative overflow-hidden">
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                  <i class="fa-solid fa-atom text-sky-600"></i>
+                  Simple Pendulum Physics Simulation
+                </span>
+                <span id="pendulum-status-badge" class="text-xs px-2.5 py-1 rounded-full font-bold bg-slate-100 text-slate-700">
+                  Ready at Rest
+                </span>
+              </div>
+
+              <canvas id="exp9-pendulum-canvas" width="700" height="340" class="w-full h-auto bg-slate-900 rounded-xl border border-slate-800 shadow-inner block"></canvas>
+            </div>
+
+            <!-- Log Table -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+              <h3 class="font-display font-bold text-slate-900 text-sm flex items-center justify-between">
+                <span><i class="fa-solid fa-table text-sky-600 mr-2"></i>Observation Table: Time Period Determination</span>
+                <button onclick="clearPendulumLogs()" class="text-xs text-rose-600 hover:text-rose-800 font-medium">Clear Log</button>
+              </h3>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-xs text-left text-slate-700">
+                  <thead class="text-[11px] uppercase bg-slate-100 text-slate-600 font-bold border-b">
+                    <tr>
+                      <th class="p-2.5 rounded-l-lg">Length L (cm)</th>
+                      <th class="p-2.5">Trial 1 ($t_1$ s)</th>
+                      <th class="p-2.5">Trial 2 ($t_2$ s)</th>
+                      <th class="p-2.5">Mean Time for 20 Osc. (s)</th>
+                      <th class="p-2.5 rounded-r-lg">Time Period $T = \frac{\text{Mean}}{20}$ (s)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="exp9-table-body" class="divide-y divide-slate-100 font-medium">
+                    <!-- Dynamic Rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECOND PART: DISTANCE-TIME GRAPH GENERATOR -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-3 gap-2">
+            <div>
+              <span class="text-xs font-bold text-sky-600 uppercase tracking-wider">Kinematics Module</span>
+              <h3 class="font-display font-bold text-slate-900 text-lg">Distance-Time Graph Generator</h3>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-semibold text-slate-500">Compare Speeds: Walking vs Running</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Speed Control Panel -->
+            <div class="lg:col-span-4 space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div class="space-y-2">
+                <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+                  <span class="flex items-center space-x-1.5">
+                    <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+                    <span>Walking Speed:</span>
+                  </span>
+                  <span id="val-walk-speed" class="text-emerald-700 font-extrabold">2.0 m/s</span>
+                </div>
+                <input id="slider-walk-speed" type="range" min="0.5" max="4.0" value="2.0" step="0.1" oninput="updateGraph()" class="w-full accent-emerald-600 cursor-pointer">
+              </div>
+
+              <div class="space-y-2">
+                <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+                  <span class="flex items-center space-x-1.5">
+                    <span class="w-3 h-3 rounded-full bg-indigo-600 inline-block"></span>
+                    <span>Running Speed:</span>
+                  </span>
+                  <span id="val-run-speed" class="text-indigo-700 font-extrabold">5.0 m/s</span>
+                </div>
+                <input id="slider-run-speed" type="range" min="3.0" max="10.0" value="5.0" step="0.2" oninput="updateGraph()" class="w-full accent-indigo-600 cursor-pointer">
+              </div>
+
+              <div class="pt-2 border-t border-slate-200 space-y-2 text-xs">
+                <div class="p-3 bg-white rounded-lg border border-slate-200 space-y-1">
+                  <div class="font-bold text-slate-800">Slope & Speed Relationship:</div>
+                  <p class="text-slate-600 text-[11px] leading-relaxed">
+                    The slope of a Distance-Time graph represents <strong>Speed</strong> ($\text{Speed} = \frac{\Delta \text{Distance}}{\Delta \text{Time}}$). Steeper slope = Higher speed.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Canvas Graph View -->
+            <div class="lg:col-span-8">
+              <canvas id="exp9-graph-canvas" width="600" height="300" class="w-full h-auto bg-slate-900 rounded-xl border border-slate-800 shadow-inner block"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODE 2: EXPERIMENT 9 ANIMATED ODYSSEY -->
+      <div id="exp9-anim" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-4">
+            <div>
+              <span class="text-xs font-bold text-sky-600 uppercase tracking-wider">Guided Interactive Story</span>
+              <h2 class="font-display font-extrabold text-2xl text-slate-900">Understanding Pendulum Oscillations</h2>
+            </div>
+            <button onclick="playExp9AnimVoice()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs px-3 py-2 rounded-xl flex items-center space-x-1.5">
+              <i class="fa-solid fa-volume-high"></i>
+              <span>Narrate Scene</span>
+            </button>
+          </div>
+
+          <!-- Scene Visual Box -->
+          <div id="exp9-anim-art" class="h-80 sm:h-96 rounded-2xl relative overflow-hidden bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 flex items-center justify-center border border-indigo-900 shadow-inner">
+            <div id="exp9-anim-center-graphic" class="text-8xl transition-all duration-500 transform hover:scale-105">
+              ⏱️
+            </div>
+
+            <div class="absolute bottom-4 left-4 right-4 bg-slate-900/80 backdrop-blur-md text-white p-4 rounded-xl border border-white/20 shadow-xl">
+              <span id="exp9-anim-step-badge" class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-sky-400 text-slate-900 mb-1 inline-block">
+                Step 1 of 4
+              </span>
+              <h4 id="exp9-anim-title" class="font-display font-bold text-base text-sky-300">1. Mean Position vs Extreme Position</h4>
+              <p id="exp9-anim-desc" class="text-xs text-slate-200 mt-1 leading-relaxed">
+                When the pendulum bob rests vertically at rest, it is at its Mean Position (O). Displacing it to A releases potential energy, causing it to swing back and forth.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step Progress Controls -->
+          <div class="space-y-3">
+            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+              <div id="exp9-anim-progress" class="bg-sky-500 h-full w-1/4 transition-all duration-300"></div>
+            </div>
+
+            <div class="flex justify-between items-center gap-2">
+              <button onclick="prevExp9AnimStep()" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-100 flex items-center space-x-1">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Previous Step</span>
+              </button>
+              <div id="exp9-anim-step-dots" class="flex space-x-1.5"></div>
+              <button onclick="nextExp9AnimStep()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow flex items-center space-x-1">
+                <span>Next Step</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODE 3: EXPERIMENT 9 THEORY & QUIZ -->
+      <div id="exp9-theory" class="hidden space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+            <div class="w-8 h-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center font-bold">
+              <i class="fa-solid fa-book"></i>
+            </div>
+            <h3 class="font-display font-bold text-slate-900 text-base">Key Formulae & Definitions</h3>
+            <ul class="text-xs text-slate-600 space-y-2 list-disc pl-4 leading-relaxed">
+              <li><strong>One Oscillation:</strong> Movement of the bob from mean position O to extreme A, then to extreme B, and back to O ($O \rightarrow A \rightarrow B \rightarrow O$).</li>
+              <li><strong>Time Period ($T$):</strong> Time taken by the pendulum to complete one full oscillation ($T = \frac{\text{Total Time}}{\text{Number of Oscillations}}$).</li>
+              <li><strong>Formula:</strong> $T = 2\pi\sqrt{\frac{L}{g}}$, where $L$ is thread length and $g = 9.8\text{ m/s}^2$. Time period increases as length $L$ increases.</li>
+              <li><strong>Uniform Motion:</strong> Object moving along a straight line with constant speed produces a straight line Distance-Time graph.</li>
+            </ul>
+          </div>
+
+          <div class="bg-amber-50 rounded-2xl p-5 border border-amber-200 shadow-sm space-y-3">
+            <div class="w-8 h-8 rounded-lg bg-amber-200 text-amber-800 flex items-center justify-center font-bold">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="font-display font-bold text-amber-900 text-base">Lab Precautions</h3>
+            <ul class="text-xs text-amber-900/90 space-y-2 list-disc pl-4 leading-relaxed">
+              <li><strong>Small Displacement:</strong> The displacement angle should be small (&lt; 15°) to ensure true simple harmonic motion.</li>
+              <li><strong>No Spinning:</strong> Release the metallic bob gently without pushing or spinning it.</li>
+              <li><strong>Avoid Drafts:</strong> Ensure fans are turned off so air currents do not damp the oscillation timing.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Quiz Box Exp 9 -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
+          <div class="flex justify-between items-center border-b pb-3">
+            <h3 class="font-display font-bold text-slate-900 text-lg flex items-center gap-2">
+              <i class="fa-solid fa-graduation-cap text-sky-600"></i>
+              Competency Assessment: Experiment 09
+            </h3>
+            <span id="exp9-quiz-score" class="text-xs font-bold px-3 py-1 bg-slate-100 rounded-full text-slate-700">
+              Score: 0/3
+            </span>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Q1 -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+              <p class="text-xs font-bold text-slate-800">Q1. If the length of a simple pendulum is increased from 80 cm to 100 cm, its time period ($T$) will:</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <button onclick="checkExp9Quiz(1, 'a', this)" class="q9-1-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium" data-correct="true">A) Increase</button>
+                <button onclick="checkExp9Quiz(1, 'b', this)" class="q9-1-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">B) Decrease</button>
+                <button onclick="checkExp9Quiz(1, 'c', this)" class="q9-1-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">C) Remain unchanged</button>
+                <button onclick="checkExp9Quiz(1, 'd', this)" class="q9-1-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">D) Become zero</button>
+              </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+              <p class="text-xs font-bold text-slate-800">Q2. What does a steeper line on a Distance-Time graph indicate?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <button onclick="checkExp9Quiz(2, 'a', this)" class="q9-2-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">A) Slower speed</button>
+                <button onclick="checkExp9Quiz(2, 'b', this)" class="q9-2-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium" data-correct="true">B) Faster speed</button>
+                <button onclick="checkExp9Quiz(2, 'c', this)" class="q9-2-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">C) Stationary object</button>
+                <button onclick="checkExp9Quiz(2, 'd', this)" class="q9-2-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">D) Zero acceleration</button>
+              </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+              <p class="text-xs font-bold text-slate-800">Q3. If a pendulum takes 36 seconds to complete 20 oscillations, its time period $T$ is:</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <button onclick="checkExp9Quiz(3, 'a', this)" class="q9-3-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">A) 36.0 seconds</button>
+                <button onclick="checkExp9Quiz(3, 'b', this)" class="q9-3-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium" data-correct="true">B) 1.80 seconds</button>
+                <button onclick="checkExp9Quiz(3, 'c', this)" class="q9-3-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">C) 0.55 seconds</button>
+                <button onclick="checkExp9Quiz(3, 'd', this)" class="q9-3-opt p-2.5 rounded-lg border border-slate-200 bg-white text-left hover:bg-slate-100 font-medium">D) 2.00 seconds</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-6 text-center text-xs">
+    <div class="max-w-7xl mx-auto px-4 space-y-2">
+      <p class="font-medium text-slate-300">Bright Vision Publication House • Grade 7 Science Lab Manual Companion</p>
+      <p class="text-slate-500">NCF-2023 • NEP 2020 • Panchkosha Vikas • Kaushal Bodh Compliant</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    // ====================================================================================
+    // GLOBAL APP STATE & NAVIGATION
+    // ====================================================================================
+    let activeMainTab = 'exp1'; // 'exp1' or 'exp9'
+    let activeMode = 'sim';     // 'sim', 'anim', or 'theory'
+
+    function switchMainTab(tab) {
+      activeMainTab = tab;
+      
+      const navExp1 = document.getElementById('nav-exp1');
+      const navExp9 = document.getElementById('nav-exp9');
+      const exp1Container = document.getElementById('exp1-container');
+      const exp9Container = document.getElementById('exp9-container');
+
+      const badge = document.getElementById('active-exp-badge');
+      const title = document.getElementById('active-exp-title');
+
+      if (tab === 'exp1') {
+        navExp1.className = 'px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center space-x-2 bg-teal-600 text-white shadow';
+        navExp9.className = 'px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-700';
+        exp1Container.classList.remove('hidden');
+        exp9Container.classList.add('hidden');
+
+        badge.className = 'px-2.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300';
+        badge.textContent = 'Life Science';
+        title.textContent = "Stomata & Moll's Half-Leaf Experiment";
+      } else {
+        navExp9.className = 'px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center space-x-2 bg-sky-600 text-white shadow';
+        navExp1.className = 'px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-700';
+        exp9Container.classList.remove('hidden');
+        exp1Container.classList.add('hidden');
+
+        badge.className = 'px-2.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-300';
+        badge.textContent = 'Physical Science';
+        title.textContent = 'Simple Pendulum & Distance-Time Graph';
+      }
+
+      switchMode(activeMode);
+    }
+
+    function switchMode(mode) {
+      activeMode = mode;
+      
+      const modeSimBtn = document.getElementById('mode-sim');
+      const modeAnimBtn = document.getElementById('mode-anim');
+      const modeTheoryBtn = document.getElementById('mode-theory');
+
+      // Reset button styles
+      [modeSimBtn, modeAnimBtn, modeTheoryBtn].forEach(btn => {
+        btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 text-slate-600 hover:bg-slate-100';
+      });
+
+      const activeBtn = mode === 'sim' ? modeSimBtn : (mode === 'anim' ? modeAnimBtn : modeTheoryBtn);
+      const activeColorClass = activeMainTab === 'exp1' ? 'bg-teal-50 text-teal-700 border border-teal-300' : 'bg-sky-50 text-sky-700 border border-sky-300';
+      activeBtn.className = `px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${activeColorClass}`;
+
+      // Toggle Exp 1 subviews
+      document.getElementById('exp1-sim').classList.toggle('hidden', !(activeMainTab === 'exp1' && mode === 'sim'));
+      document.getElementById('exp1-anim').classList.toggle('hidden', !(activeMainTab === 'exp1' && mode === 'anim'));
+      document.getElementById('exp1-theory').classList.toggle('hidden', !(activeMainTab === 'exp1' && mode === 'theory'));
+
+      // Toggle Exp 9 subviews
+      document.getElementById('exp9-sim').classList.toggle('hidden', !(activeMainTab === 'exp9' && mode === 'sim'));
+      document.getElementById('exp9-anim').classList.toggle('hidden', !(activeMainTab === 'exp9' && mode === 'anim'));
+      document.getElementById('exp9-theory').classList.toggle('hidden', !(activeMainTab === 'exp9' && mode === 'theory'));
+
+      // Render graphics on tab/mode switches
+      if (activeMainTab === 'exp1') {
+        if (mode === 'sim') { drawExp1Canvas(); drawExp1StomataCanvas(); }
+        if (mode === 'anim') { renderExp1AnimStep(); }
+      } else {
+        if (mode === 'sim') { updateGraph(); }
+        if (mode === 'anim') { renderExp9AnimStep(); }
+      }
+    }
+
+    // Speech Synthesis Global Function
+    function readText(text) {
+      if (!('speechSynthesis' in window)) {
+        alert('Text-to-speech is not supported in this browser.');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.95;
+      utterance.pitch = 1.0;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function toggleGlobalAudio() {
+      if (window.speechSynthesis && window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+      } else {
+        if (activeMainTab === 'exp1') {
+          readText("Experiment 1: Nutrition in plants. Aim: To observe stomata in a leaf peel and demonstrate that carbon dioxide is needed for photosynthesis using Moll's half-leaf experiment.");
+        } else {
+          readText("Experiment 9: Motion and Time. Aim: To find the time period of a simple pendulum for two lengths, 80 centimeters and 100 centimeters, and plot a distance-time graph.");
+        }
+      }
+    }
+
+    // ====================================================================================
+    // EXPERIMENT 01: SIMULATOR LOGIC & CANVAS DRAWING
+    // ====================================================================================
+    let exp1State = {
+      koh: 'koh',
+      light: 'sunlight',
+      destarch: 'yes',
+      stomataMag: 10,
+      iodineTested: false
+    };
+
+    function resetExp1() {
+      document.getElementById('exp1-koh-select').value = 'koh';
+      document.getElementById('exp1-light-select').value = 'sunlight';
+      document.getElementById('exp1-destarch-select').value = 'yes';
+      exp1State.stomataMag = 10;
+      exp1State.iodineTested = false;
+      updateExp1Sim();
+    }
+
+    function setStomataMag(mag) {
+      exp1State.stomataMag = mag;
+      document.getElementById('btn-mag-10x').className = mag === 10 
+        ? 'py-2 px-3 rounded-xl border border-teal-600 bg-teal-600 text-white font-bold text-xs flex items-center justify-center space-x-1'
+        : 'py-2 px-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-700 font-bold text-xs flex items-center justify-center space-x-1 hover:bg-slate-100';
+      document.getElementById('btn-mag-40x').className = mag === 40 
+        ? 'py-2 px-3 rounded-xl border border-teal-600 bg-teal-600 text-white font-bold text-xs flex items-center justify-center space-x-1'
+        : 'py-2 px-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-700 font-bold text-xs flex items-center justify-center space-x-1 hover:bg-slate-100';
+      
+      document.getElementById('stomata-mag-label').textContent = mag + 'x';
+      drawExp1StomataCanvas();
+    }
+
+    function updateExp1Sim() {
+      exp1State.koh = document.getElementById('exp1-koh-select').value;
+      exp1State.light = document.getElementById('exp1-light-select').value;
+      exp1State.destarch = document.getElementById('exp1-destarch-select').value;
+      
+      // Update badges
+      document.getElementById('label-koh-status').textContent = exp1State.koh === 'koh' ? 'KOH Solution' : 'Plain Water';
+      document.getElementById('label-light-status').textContent = exp1State.light === 'sunlight' ? 'Bright Sunlight' : 'Dark Room';
+      document.getElementById('label-destarch-status').textContent = exp1State.destarch === 'yes' ? 'Destarched' : 'Not Destarched';
+
+      document.getElementById('canvas-status-tag').textContent = exp1State.light === 'sunlight' ? 'Sunlight Active' : 'Darkness';
+      document.getElementById('canvas-status-tag').className = exp1State.light === 'sunlight' 
+        ? 'text-xs px-2.5 py-1 rounded-full font-bold bg-amber-100 text-amber-800' 
+        : 'text-xs px-2.5 py-1 rounded-full font-bold bg-indigo-900 text-indigo-200';
+
+      drawExp1Canvas();
+      drawExp1StomataCanvas();
+      updateExp1Table();
+    }
+
+    function runIodineTestExp1() {
+      exp1State.iodineTested = true;
+      drawExp1Canvas();
+      updateExp1Table();
+      readText("Iodine starch test complete. The leaf section outside the bottle turns blue-black indicating starch synthesis. The leaf section inside the KOH bottle remains brown-yellow because carbon dioxide was unavailable.");
+    }
+
+    function drawExp1Canvas() {
+      const canvas = document.getElementById('exp1-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Background Sky / Light
+      if (exp1State.light === 'sunlight') {
+        const skyGradient = ctx.createLinearGradient(0, 0, 0, h);
+        skyGradient.addColorStop(0, '#0f172a');
+        skyGradient.addColorStop(1, '#1e293b');
+        ctx.fillStyle = skyGradient;
+        ctx.fillRect(0, 0, w, h);
+
+        // Sun graphic top left
+        ctx.beginPath();
+        ctx.arc(80, 70, 35, 0, Math.PI * 2);
+        ctx.fillStyle = '#fbbf24';
+        ctx.shadowColor = '#fbbf24';
+        ctx.shadowBlur = 30;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Sun Rays
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.2)';
+        ctx.lineWidth = 3;
+        for (let i = 0; i < 8; i++) {
+          let ang = (i * Math.PI) / 4;
+          ctx.beginPath();
+          ctx.moveTo(80 + Math.cos(ang) * 45, 70 + Math.sin(ang) * 45);
+          ctx.lineTo(80 + Math.cos(ang) * 80, 70 + Math.sin(ang) * 80);
+          ctx.stroke();
+        }
+      } else {
+        ctx.fillStyle = '#020617';
+        ctx.fillRect(0, 0, w, h);
+      }
+
+      // Wooden Table Base
+      ctx.fillStyle = '#332115';
+      ctx.fillRect(0, h - 40, w, 40);
+      ctx.fillStyle = '#452e1e';
+      ctx.fillRect(0, h - 40, w, 6);
+
+      // --- Draw Potted Plant ---
+      let potX = 180, potY = h - 40;
+
+      // Pot
+      ctx.fillStyle = '#c2410c';
+      ctx.beginPath();
+      ctx.moveTo(potX - 35, potY);
+      ctx.lineTo(potX + 35, potY);
+      ctx.lineTo(potX + 25, potY - 50);
+      ctx.lineTo(potX - 25, potY - 50);
+      ctx.closePath();
+      ctx.fill();
+
+      // Stem
+      ctx.strokeStyle = '#15803d';
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.moveTo(potX, potY - 50);
+      ctx.quadraticCurveTo(potX + 10, potY - 140, potX, potY - 220);
+      ctx.stroke();
+
+      // --- Draw Moll's Wide-Mouth Bottle ---
+      let bottleX = 380, bottleY = h - 40;
+      let bottleW = 120, bottleH = 170;
+
+      // Bottle Liquid (KOH or Water)
+      ctx.fillStyle = exp1State.koh === 'koh' ? 'rgba(20, 184, 166, 0.25)' : 'rgba(56, 189, 248, 0.25)';
+      ctx.fillRect(bottleX - bottleW/2 + 6, bottleY - 45, bottleW - 12, 40);
+
+      // KOH Label text
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = 'bold 11px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText(exp1State.koh === 'koh' ? 'KOH Solution' : 'Water Solution', bottleX, bottleY - 20);
+
+      // Glass Bottle Body Outline
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.lineWidth = 3;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.beginPath();
+      ctx.roundRect(bottleX - bottleW/2, bottleY - bottleH, bottleW, bottleH, 12);
+      ctx.fill();
+      ctx.stroke();
+
+      // Split Cork on top
+      ctx.fillStyle = '#b45309';
+      ctx.fillRect(bottleX - 25, bottleY - bottleH - 12, 50, 16);
+
+      // --- Draw Tested Leaf Passing Through Cork ---
+      let leafStartY = potY - 140;
+      let insideColor = exp1State.iodineTested 
+        ? (exp1State.destarch === 'no' ? '#1e1b4b' : '#d97706') // Brown-yellow if destarched & inside KOH
+        : '#22c55e';
+      
+      let outsideColor = exp1State.iodineTested 
+        ? (exp1State.light === 'sunlight' ? '#1e1b4b' : '#d97706') // Blue-black if sunlight
+        : '#22c55e';
+
+      // Outside Leaf Segment
+      ctx.fillStyle = outsideColor;
+      ctx.beginPath();
+      ctx.ellipse(potX + 60, leafStartY - 20, 50, 20, Math.PI / 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#15803d';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Inside Bottle Leaf Segment
+      ctx.fillStyle = insideColor;
+      ctx.beginPath();
+      ctx.ellipse(bottleX - 10, bottleY - 100, 45, 18, Math.PI / 12, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // CO2 Gas Particles Animation graphic inside/outside bottle
+      if (exp1State.koh === 'water') {
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = '9px Inter';
+        ctx.fillText('CO₂', bottleX - 20, bottleY - 120);
+        ctx.fillText('CO₂', bottleX + 20, bottleY - 80);
+      } else {
+        ctx.fillStyle = '#f43f5e';
+        ctx.font = 'bold 10px Inter';
+        ctx.fillText('No CO₂ (Absorbed)', bottleX, bottleY - 130);
+      }
+
+      // Outside atmospheric CO2
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = '10px Inter';
+      ctx.fillText('CO₂ (Air)', potX + 80, leafStartY - 50);
+
+      // Labels
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '10px Inter';
+      ctx.fillText('Split Cork (Sealed)', bottleX, bottleY - bottleH - 18);
+    }
+
+    function drawExp1StomataCanvas() {
+      const canvas = document.getElementById('exp1-stomata-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = '#064e3b';
+      ctx.fillRect(0, 0, w, h);
+
+      const isOpen = exp1State.light === 'sunlight';
+      document.getElementById('stomata-desc').textContent = isOpen 
+        ? "Guard cells swollen with water; pore OPEN for CO₂ intake."
+        : "Guard cells flaccid; pore CLOSED in darkness.";
+
+      if (exp1State.stomataMag === 10) {
+        // Draw multiple small stomatal units
+        for (let i = 0; i < 5; i++) {
+          let cx = 40 + (i % 3) * 60;
+          let cy = 40 + Math.floor(i / 3) * 65;
+          drawSingleStoma(ctx, cx, cy, 0.5, isOpen);
+        }
+      } else {
+        // 40x High Power Single Stoma
+        drawSingleStoma(ctx, w / 2, h / 2, 1.3, isOpen);
+      }
+    }
+
+    function drawSingleStoma(ctx, cx, cy, scale, isOpen) {
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+
+      // Epidermal background cells
+      ctx.strokeStyle = '#059669';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(-40, -30, 80, 60);
+
+      // Guard Cells (Left & Right)
+      ctx.fillStyle = '#10b981';
+      ctx.strokeStyle = '#022c22';
+      ctx.lineWidth = 3;
+
+      let gap = isOpen ? 12 : 2;
+
+      // Left Bean Guard Cell
+      ctx.beginPath();
+      ctx.ellipse(-gap - 8, 0, 12, 26, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Right Bean Guard Cell
+      ctx.beginPath();
+      ctx.ellipse(gap + 8, 0, 12, 26, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Central Stomatal Pore
+      if (isOpen) {
+        ctx.fillStyle = '#022c22';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, gap, 18, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    function updateExp1Table() {
+      const insideCo2Cell = document.getElementById('res-inside-co2');
+      const insideColorCell = document.getElementById('res-inside-color');
+      const insideInferCell = document.getElementById('res-inside-infer');
+
+      const outsideCo2Cell = document.getElementById('res-outside-co2');
+      const outsideColorCell = document.getElementById('res-outside-color');
+      const outsideInferCell = document.getElementById('res-outside-infer');
+
+      if (exp1State.koh === 'koh') {
+        insideCo2Cell.textContent = 'Absorbed by KOH (No CO₂)';
+        insideCo2Cell.className = 'p-2.5 text-rose-700 font-semibold';
+      } else {
+        insideCo2Cell.textContent = 'Available in Water Bottle';
+        insideCo2Cell.className = 'p-2.5 text-emerald-700 font-semibold';
+      }
+
+      if (exp1State.iodineTested) {
+        if (exp1State.koh === 'koh' && exp1State.destarch === 'yes') {
+          insideColorCell.textContent = 'Brown-Yellow (No Starch)';
+          insideColorCell.className = 'p-2.5 font-bold text-amber-700';
+          insideInferCell.textContent = 'No photosynthesis due to lack of CO₂';
+        } else {
+          insideColorCell.textContent = 'Blue-Black (Starch Present)';
+          insideColorCell.className = 'p-2.5 font-bold text-indigo-900';
+          insideInferCell.textContent = 'Starch present (Pre-existing or created)';
+        }
+
+        if (exp1State.light === 'sunlight' && exp1State.destarch === 'yes') {
+          outsideColorCell.textContent = 'Blue-Black (Starch Present)';
+          outsideColorCell.className = 'p-2.5 font-bold text-indigo-900';
+          outsideInferCell.textContent = 'Photosynthesis occurred using air CO₂';
+        } else {
+          outsideColorCell.textContent = 'Brown-Yellow (No Starch)';
+          outsideColorCell.className = 'p-2.5 font-bold text-amber-700';
+          outsideInferCell.textContent = 'No light for photosynthesis';
+        }
+      } else {
+        insideColorCell.textContent = 'Awaiting Iodine Test...';
+        insideColorCell.className = 'p-2.5 text-slate-400 italic';
+        outsideColorCell.textContent = 'Awaiting Iodine Test...';
+        outsideColorCell.className = 'p-2.5 text-slate-400 italic';
+      }
+    }
+
+    // ====================================================================================
+    // EXPERIMENT 01: ANIMATED ODYSSEY
+    // ====================================================================================
+    let exp1AnimStep = 0;
+    const exp1AnimData = [
+      {
+        icon: '🪴',
+        bg: 'linear-gradient(to bottom, #0f172a, #1e293b)',
+        badge: 'Step 1 of 5',
+        title: '1. Destarching the Plant',
+        desc: 'The potted plant is kept in a dark room for 48 to 72 hours. In complete darkness, photosynthesis stops, so the leaf uses up all pre-existing starch stored in its cells.',
+        voice: 'Step 1: Keep the potted plant in a dark room for 48 to 72 hours to remove all pre-existing starch.'
+      },
+      {
+        icon: '🫙',
+        bg: 'linear-gradient(to bottom, #134e4a, #064e3b)',
+        badge: 'Step 2 of 5',
+        title: '2. Setting Up Moll\'s Half-Leaf Apparatus',
+        desc: 'Pour KOH solution into a wide-mouth bottle. Insert half of a destarched leaf into the bottle through a split cork, leaving the other half outside. Seal tight with petroleum jelly.',
+        voice: 'Step 2: Place half of the leaf inside a bottle containing Potassium Hydroxide solution and seal the cork tightly.'
+      },
+      {
+        icon: '☀️',
+        bg: 'linear-gradient(to bottom, #0284c7, #38bdf8)',
+        badge: 'Step 3 of 5',
+        title: '3. Exposure to Sunlight',
+        desc: 'Place the entire potted plant setup in bright sunlight for 4 to 5 hours. The outside leaf half receives light, water, and atmospheric CO₂. The inside half has light and water, but no CO₂.',
+        voice: 'Step 3: Keep the entire plant setup in bright sunlight for 4 to 5 hours.'
+      },
+      {
+        icon: '🧪',
+        bg: 'linear-gradient(to bottom, #7c2d12, #9a3412)',
+        badge: 'Step 4 of 5',
+        title: '4. Decolorization in Hot Alcohol',
+        desc: 'Pluck the tested leaf. Boil it in water first, then in alcohol using a hot-water bath (never over a direct flame!) until all green chlorophyll is removed and the leaf turns pale white.',
+        voice: 'Step 4: Boil the leaf in alcohol using a water bath to remove green chlorophyll pigment safely.'
+      },
+      {
+        icon: '🍃',
+        bg: 'linear-gradient(to bottom, #312e81, #1e1b4b)',
+        badge: 'Step 5 of 5',
+        title: '5. Iodine Starch Test Observation',
+        desc: 'Rinse the pale leaf and add iodine solution. The portion outside the bottle turns BLUE-BLACK (starch present), while the portion inside stays BROWN-YELLOW (no starch synthesized).',
+        voice: 'Step 5: Add iodine solution. The part outside turns blue-black, while the part inside KOH stays brown-yellow.'
+      }
+    ];
+
+    function renderExp1AnimStep() {
+      const step = exp1AnimData[exp1AnimStep];
+      document.getElementById('exp1-anim-art').style.background = step.bg;
+      document.getElementById('exp1-anim-center-icon').textContent = step.icon;
+      document.getElementById('exp1-anim-step-badge').textContent = step.badge;
+      document.getElementById('exp1-anim-title').textContent = step.title;
+      document.getElementById('exp1-anim-desc').textContent = step.desc;
+
+      document.getElementById('exp1-anim-progress').style.width = ((exp1AnimStep + 1) * 20) + '%';
+
+      // Update Dots
+      const dotsContainer = document.getElementById('exp1-anim-step-dots');
+      dotsContainer.innerHTML = '';
+      exp1AnimData.forEach((_, idx) => {
+        const dot = document.createElement('div');
+        dot.className = `w-2.5 h-2.5 rounded-full transition-all ${idx === exp1AnimStep ? 'bg-teal-500 w-5' : 'bg-slate-300'}`;
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function nextExp1AnimStep() {
+      exp1AnimStep = (exp1AnimStep + 1) % exp1AnimData.length;
+      renderExp1AnimStep();
+    }
+
+    function prevExp1AnimStep() {
+      exp1AnimStep = (exp1AnimStep - 1 + exp1AnimData.length) % exp1AnimData.length;
+      renderExp1AnimStep();
+    }
+
+    function playExp1AnimVoice() {
+      readText(exp1AnimData[exp1AnimStep].voice);
+    }
+
+    // Exp 1 Quiz Checker
+    let exp1QuizScore = 0;
+    const exp1QuizChecked = {1: false, 2: false, 3: false};
+
+    function checkExp1Quiz(qNum, opt, btn) {
+      if (exp1QuizChecked[qNum]) return;
+      exp1QuizChecked[qNum] = true;
+
+      const isCorrect = btn.getAttribute('data-correct') === 'true';
+      if (isCorrect) {
+        btn.className = 'p-2.5 rounded-lg border-2 border-emerald-500 bg-emerald-50 text-emerald-900 text-left font-bold';
+        exp1QuizScore++;
+      } else {
+        btn.className = 'p-2.5 rounded-lg border-2 border-rose-500 bg-rose-50 text-rose-900 text-left font-bold';
+      }
+
+      document.getElementById('exp1-quiz-score').textContent = `Score: ${exp1QuizScore}/3`;
+    }
+
+    // ====================================================================================
+    // EXPERIMENT 09: PENDULUM SIMULATOR & GRAPH LOGIC
+    // ====================================================================================
+    let pendulumState = {
+      length: 80,      // cm
+      angleDeg: 10,    // deg
+      isSwinging: false,
+      startTime: 0,
+      elapsedSec: 0,
+      oscillations: 0,
+      currentAngle: 0,
+      animationFrameId: null
+    };
+
+    let pendulumLogs = [];
+
+    function setPendulumLength(len) {
+      document.getElementById('slider-length').value = len;
+      onPendulumLengthChange(len);
+    }
+
+    function onPendulumLengthChange(val) {
+      pendulumState.length = parseFloat(val);
+      document.getElementById('val-length').textContent = val + ' cm';
+      resetExp9Pendulum();
+    }
+
+    function onPendulumAngleChange(val) {
+      pendulumState.angleDeg = parseFloat(val);
+      document.getElementById('val-angle').textContent = val + '°';
+      resetExp9Pendulum();
+    }
+
+    function resetExp9Pendulum() {
+      if (pendulumState.animationFrameId) {
+        cancelAnimationFrame(pendulumState.animationFrameId);
+      }
+      pendulumState.isSwinging = false;
+      pendulumState.elapsedSec = 0;
+      pendulumState.oscillations = 0;
+      pendulumState.currentAngle = (pendulumState.angleDeg * Math.PI) / 180;
+
+      document.getElementById('stopwatch-display').textContent = '00:00.00';
+      document.getElementById('oscillation-count').textContent = '0 / 20';
+      document.getElementById('btn-pendulum-start').className = 'w-full bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 text-sm';
+      document.getElementById('icon-pendulum-play').className = 'fa-solid fa-play';
+      document.getElementById('text-pendulum-play').textContent = 'Release & Start Timer';
+
+      document.getElementById('pendulum-status-badge').textContent = 'Ready at Rest';
+      document.getElementById('pendulum-status-badge').className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-slate-100 text-slate-700';
+
+      drawPendulumCanvas();
+    }
+
+    function togglePendulumSwing() {
+      if (!pendulumState.isSwinging) {
+        pendulumState.isSwinging = true;
+        pendulumState.startTime = performance.now() - (pendulumState.elapsedSec * 1000);
+
+        document.getElementById('btn-pendulum-start').className = 'w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 text-sm';
+        document.getElementById('icon-pendulum-play').className = 'fa-solid fa-pause';
+        document.getElementById('text-pendulum-play').textContent = 'Pause Timer';
+
+        document.getElementById('pendulum-status-badge').textContent = 'Swinging...';
+        document.getElementById('pendulum-status-badge').className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-100 text-emerald-800 animate-pulse';
+
+        animatePendulum();
+      } else {
+        pendulumState.isSwinging = false;
+        if (pendulumState.animationFrameId) {
+          cancelAnimationFrame(pendulumState.animationFrameId);
+        }
+        document.getElementById('btn-pendulum-start').className = 'w-full bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 text-sm';
+        document.getElementById('icon-pendulum-play').className = 'fa-solid fa-play';
+        document.getElementById('text-pendulum-play').textContent = 'Resume Timer';
+
+        document.getElementById('pendulum-status-badge').textContent = 'Paused';
+        document.getElementById('pendulum-status-badge').className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-amber-100 text-amber-800';
+      }
+    }
+
+    function animatePendulum() {
+      if (!pendulumState.isSwinging) return;
+
+      let now = performance.now();
+      pendulumState.elapsedSec = (now - pendulumState.startTime) / 1000;
+
+      // Physics Math: T = 2 * PI * sqrt(L / g)
+      let L_meters = pendulumState.length / 100;
+      let g = 9.8;
+      let timePeriod = 2 * Math.PI * Math.sqrt(L_meters / g);
+      let omega = (2 * Math.PI) / timePeriod;
+
+      // Current angle theta(t) = theta_max * cos(omega * t)
+      let maxRad = (pendulumState.angleDeg * Math.PI) / 180;
+      pendulumState.currentAngle = maxRad * Math.cos(omega * pendulumState.elapsedSec);
+
+      // Oscillation count
+      pendulumState.oscillations = Math.floor(pendulumState.elapsedSec / timePeriod);
+
+      // Update Stopwatch Display
+      let totalMs = Math.floor(pendulumState.elapsedSec * 100);
+      let mins = Math.floor(totalMs / 6000);
+      let secs = Math.floor((totalMs % 6000) / 100);
+      let ms = totalMs % 100;
+
+      document.getElementById('stopwatch-display').textContent = 
+        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
+      
+      document.getElementById('oscillation-count').textContent = `${pendulumState.oscillations} / 20`;
+
+      if (pendulumState.oscillations >= 20) {
+        togglePendulumSwing();
+        readText(`Completed 20 oscillations for length ${pendulumState.length} centimeters. Total time taken is ${pendulumState.elapsedSec.toFixed(2)} seconds.`);
+      }
+
+      drawPendulumCanvas();
+      if (pendulumState.isSwinging) {
+        pendulumState.animationFrameId = requestAnimationFrame(animatePendulum);
+      }
+    }
+
+    function drawPendulumCanvas() {
+      const canvas = document.getElementById('exp9-pendulum-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid Lines
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = 0; y < h; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      // Rigid Support Stand
+      let pivotX = w / 2;
+      let pivotY = 40;
+
+      ctx.fillStyle = '#475569';
+      ctx.fillRect(pivotX - 80, pivotY - 15, 160, 15);
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(pivotX - 5, pivotY - 15, 10, 15);
+
+      // Render Thread Length visually mapped to pixels
+      let pixelLen = 100 + (pendulumState.length - 40) * 1.8;
+      let bobX = pivotX + pixelLen * Math.sin(pendulumState.currentAngle);
+      let bobY = pivotY + pixelLen * Math.cos(pendulumState.currentAngle);
+
+      // Arc Path (Trajectory)
+      let maxRad = (pendulumState.angleDeg * Math.PI) / 180;
+      let leftX = pivotX + pixelLen * Math.sin(-maxRad);
+      let leftY = pivotY + pixelLen * Math.cos(-maxRad);
+      let rightX = pivotX + pixelLen * Math.sin(maxRad);
+      let rightY = pivotY + pixelLen * Math.cos(maxRad);
+
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.2)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(leftX, leftY);
+      ctx.quadraticCurveTo(pivotX, pivotY + pixelLen + 5, rightX, rightY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Mean Position Reference Vertical Line
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(pivotX, pivotY);
+      ctx.lineTo(pivotX, pivotY + pixelLen + 30);
+      ctx.stroke();
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '10px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText('Mean (O)', pivotX, pivotY + pixelLen + 42);
+      ctx.fillText('Extreme (A)', leftX - 10, leftY + 20);
+      ctx.fillText('Extreme (B)', rightX + 10, rightY + 20);
+
+      // Metallic Thread String
+      ctx.strokeStyle = '#f8fafc';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(pivotX, pivotY);
+      ctx.lineTo(bobX, bobY);
+      ctx.stroke();
+
+      // Metallic Bob
+      ctx.beginPath();
+      ctx.arc(bobX, bobY, 16, 0, Math.PI * 2);
+      const grad = ctx.createRadialGradient(bobX - 4, bobY - 4, 2, bobX, bobY, 16);
+      grad.addColorStop(0, '#f1f5f9');
+      grad.addColorStop(0.5, '#cbd5e1');
+      grad.addColorStop(1, '#475569');
+      ctx.fillStyle = grad;
+      ctx.shadowColor = '#000';
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = '#334155';
+      ctx.stroke();
+    }
+
+    function logPendulumTrial() {
+      let L = pendulumState.length;
+      let totalTime = pendulumState.elapsedSec;
+      
+      if (totalTime < 1) {
+        alert('Please run the swing for a few oscillations before logging.');
+        return;
+      }
+
+      pendulumLogs.push({
+        length: L,
+        time: totalTime
+      });
+
+      renderPendulumLogs();
+    }
+
+    function clearPendulumLogs() {
+      pendulumLogs = [];
+      renderPendulumLogs();
+    }
+
+    function renderPendulumLogs() {
+      const tbody = document.getElementById('exp9-table-body');
+      tbody.innerHTML = '';
+
+      if (pendulumLogs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-slate-400 italic">No trials logged yet. Click "Record Trial Data" above.</td></tr>`;
+        return;
+      }
+
+      // Group logs by length
+      let grouped = {};
+      pendulumLogs.forEach(item => {
+        if (!grouped[item.length]) grouped[item.length] = [];
+        grouped[item.length].push(item.time);
+      });
+
+      for (let L in grouped) {
+        let times = grouped[L];
+        let t1 = times[0] ? times[0].toFixed(2) : '-';
+        let t2 = times[1] ? times[1].toFixed(2) : t1;
+        let mean = times.length > 1 ? ((times[0] + times[1]) / 2).toFixed(2) : parseFloat(t1).toFixed(2);
+        let T = (parseFloat(mean) / 20).toFixed(2);
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50';
+        tr.innerHTML = `
+          <td class="p-2.5 font-bold text-slate-900">${L} cm</td>
+          <td class="p-2.5 text-slate-600">${t1} s</td>
+          <td class="p-2.5 text-slate-600">${t2} s</td>
+          <td class="p-2.5 font-semibold text-sky-700">${mean} s</td>
+          <td class="p-2.5 font-extrabold text-emerald-700">${T} s</td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    // --- DISTANCE-TIME GRAPH CANVAS ---
+    function updateGraph() {
+      const walkSpeed = parseFloat(document.getElementById('slider-walk-speed').value);
+      const runSpeed = parseFloat(document.getElementById('slider-run-speed').value);
+
+      document.getElementById('val-walk-speed').textContent = walkSpeed.toFixed(1) + ' m/s';
+      document.getElementById('val-run-speed').textContent = runSpeed.toFixed(1) + ' m/s';
+
+      drawGraphCanvas(walkSpeed, runSpeed);
+    }
+
+    function drawGraphCanvas(vWalk, vRun) {
+      const canvas = document.getElementById('exp9-graph-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const margin = 45;
+      const graphW = w - margin * 2;
+      const graphH = h - margin * 2;
+
+      // Graph Background
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, w, h);
+
+      // Grid Lines
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      for (let x = margin; x <= margin + graphW; x += graphW / 10) {
+        ctx.beginPath(); ctx.moveTo(x, margin); ctx.lineTo(x, margin + graphH); ctx.stroke();
+      }
+      for (let y = margin; y <= margin + graphH; y += graphH / 5) {
+        ctx.beginPath(); ctx.moveTo(margin, y); ctx.lineTo(margin + graphW, y); ctx.stroke();
+      }
+
+      // Axes
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(margin, margin);
+      ctx.lineTo(margin, margin + graphH);
+      ctx.lineTo(margin + graphW, margin + graphH);
+      ctx.stroke();
+
+      // Axis Labels
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Time (seconds)', margin + graphW / 2 - 30, h - 10);
+
+      ctx.save();
+      ctx.translate(15, margin + graphH / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText('Distance (meters)', -40, 0);
+      ctx.restore();
+
+      // Max scale: Time = 10s, Distance = 60m
+      let maxT = 10;
+      let maxD = 60;
+
+      // Plot Walking Line (Emerald)
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(margin, margin + graphH);
+      let endX_walk = margin + (maxT / maxT) * graphW;
+      let endY_walk = (margin + graphH) - Math.min(1.0, (vWalk * maxT) / maxD) * graphH;
+      ctx.lineTo(endX_walk, endY_walk);
+      ctx.stroke();
+
+      // Plot Running Line (Indigo)
+      ctx.strokeStyle = '#6366f1';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(margin, margin + graphH);
+      let endX_run = margin + (maxT / maxT) * graphW;
+      let endY_run = (margin + graphH) - Math.min(1.0, (vRun * maxT) / maxD) * graphH;
+      ctx.lineTo(endX_run, endY_run);
+      ctx.stroke();
+
+      // Legend
+      ctx.fillStyle = '#10b981';
+      ctx.fillRect(margin + 20, margin + 15, 12, 12);
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '10px Inter';
+      ctx.fillText(`Walking (${vWalk} m/s)`, margin + 38, margin + 24);
+
+      ctx.fillStyle = '#6366f1';
+      ctx.fillRect(margin + 150, margin + 15, 12, 12);
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillText(`Running (${vRun} m/s)`, margin + 168, margin + 24);
+    }
+
+    // ====================================================================================
+    // EXPERIMENT 09: ANIMATED ODYSSEY
+    // ====================================================================================
+    let exp9AnimStep = 0;
+    const exp9AnimData = [
+      {
+        icon: '⚖️',
+        badge: 'Step 1 of 4',
+        title: '1. Mean Position vs Extreme Positions',
+        desc: 'When the pendulum bob rests vertically at rest, it is at its Mean Position (O). Pulling it to extreme position (A) gives it potential energy before release.',
+        voice: 'Step 1: The mean position is the central rest position. Pulling the bob to one side positions it at an extreme point.'
+      },
+      {
+        icon: '🔄',
+        badge: 'Step 2 of 4',
+        title: '2. Completing One Oscillation',
+        desc: 'One full oscillation occurs when the bob starts from mean O, moves to extreme A, swings across to extreme B, and returns back to mean O.',
+        voice: 'Step 2: One complete oscillation is the path from mean position to one extreme, to the opposite extreme, and back.'
+      },
+      {
+        icon: '⏱️',
+        badge: 'Step 3 of 4',
+        title: '3. Calculating Time Period (T)',
+        desc: 'Time Period T is the time taken for 1 complete oscillation. In lab, we measure total time for 20 oscillations and divide by 20 for accuracy ($T = \\text{Time}/20$).',
+        voice: 'Step 3: Measure the time for 20 oscillations using a stopwatch, then divide by 20 to find the time period.'
+      },
+      {
+        icon: '📈',
+        badge: 'Step 4 of 4',
+        title: '4. Distance-Time Graph Slopes',
+        desc: 'Distance-time graph slope = Speed. A steeper slope represents faster speed (e.g., running vs walking). Straight line = Uniform speed.',
+        voice: 'Step 4: On a distance-time graph, a steeper straight line indicates a higher uniform speed.'
+      }
+    ];
+
+    function renderExp9AnimStep() {
+      const step = exp9AnimData[exp9AnimStep];
+      document.getElementById('exp9-anim-center-graphic').textContent = step.icon;
+      document.getElementById('exp9-anim-step-badge').textContent = step.badge;
+      document.getElementById('exp9-anim-title').textContent = step.title;
+      document.getElementById('exp9-anim-desc').textContent = step.desc;
+
+      document.getElementById('exp9-anim-progress').style.width = ((exp9AnimStep + 1) * 25) + '%';
+
+      const dotsContainer = document.getElementById('exp9-anim-step-dots');
+      dotsContainer.innerHTML = '';
+      exp9AnimData.forEach((_, idx) => {
+        const dot = document.createElement('div');
+        dot.className = `w-2.5 h-2.5 rounded-full transition-all ${idx === exp9AnimStep ? 'bg-sky-400 w-5' : 'bg-slate-700'}`;
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function nextExp9AnimStep() {
+      exp9AnimStep = (exp9AnimStep + 1) % exp9AnimData.length;
+      renderExp9AnimStep();
+    }
+
+    function prevExp9AnimStep() {
+      exp9AnimStep = (exp9AnimStep - 1 + exp9AnimData.length) % exp9AnimData.length;
+      renderExp9AnimStep();
+    }
+
+    function playExp9AnimVoice() {
+      readText(exp9AnimData[exp9AnimStep].voice);
+    }
+
+    // Exp 9 Quiz Checker
+    let exp9QuizScore = 0;
+    const exp9QuizChecked = {1: false, 2: false, 3: false};
+
+    function checkExp9Quiz(qNum, opt, btn) {
+      if (exp9QuizChecked[qNum]) return;
+      exp9QuizChecked[qNum] = true;
+
+      const isCorrect = btn.getAttribute('data-correct') === 'true';
+      if (isCorrect) {
+        btn.className = 'p-2.5 rounded-lg border-2 border-emerald-500 bg-emerald-50 text-emerald-900 text-left font-bold';
+        exp9QuizScore++;
+      } else {
+        btn.className = 'p-2.5 rounded-lg border-2 border-rose-500 bg-rose-50 text-rose-900 text-left font-bold';
+      }
+
+      document.getElementById('exp9-quiz-score').textContent = `Score: ${exp9QuizScore}/3`;
+    }
+
+    // ====================================================================================
+    // INITIALIZATION ON WINDOW LOAD
+    // ====================================================================================
+    window.onload = function() {
+      switchMainTab('exp1');
+      resetExp1();
+      resetExp9Pendulum();
+      renderPendulumLogs();
+    };
+  </script>
+</body>
+</html>

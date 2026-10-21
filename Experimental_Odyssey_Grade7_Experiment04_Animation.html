@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Experimental Odyssey | Experiment 04 Animation</title>
+<style>
+:root{--purple:#7136c8;--violet:#a34ce0;--ink:#172b4d;--muted:#60738c;--paper:#fff;--acid:#f04470;--base:#20ae76;--gold:#f5b52e}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;color:var(--ink);background:radial-gradient(circle at 8% 0%,#f1e8ff,transparent 32%),linear-gradient(135deg,#fff,#f5f0ff 55%,#eaf9ff)}
+header{color:white;background:linear-gradient(115deg,#32106d,#7136c8 55%,#b04be2);padding:24px 18px;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:#ffffff16;right:-80px;top:-170px}
+.wrap{max-width:1050px;margin:auto;padding:18px}.eyebrow{font-weight:850;letter-spacing:2px;font-size:.75rem;color:#f4dfff}.hero{display:flex;align-items:center;justify-content:space-between;gap:15px}.hero h1{font-size:clamp(1.8rem,5vw,2.8rem);margin:7px 0}.hero p{margin:5px 0;color:#f2eaff}.heroicon{font-size:4.5rem;filter:drop-shadow(0 8px 12px #1b063b55);animation:float 3s ease-in-out infinite}@keyframes float{50%{transform:translateY(-9px) rotate(5deg)}}
+.panel{background:#ffffffed;border:1px solid #e2d5f5;border-radius:23px;padding:18px;box-shadow:0 15px 38px #45216d12;margin:18px 0}.topline{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#f0e5ff;color:#6430ae;border-radius:50px;padding:6px 11px;font-size:.78rem;font-weight:850}.stage{height:380px;position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(#e5f5ff 0 70%,#d7e1eb 70% 73%,#b8c5d3 73%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:35px}
+.window{position:absolute;left:5%;top:8%;width:24%;height:53%;border:10px solid #fff9;border-radius:10px;background:linear-gradient(130deg,#b9e6ff88,#ffffff55);box-shadow:inset 0 0 20px #5e9bc344}
+.sun{position:absolute;right:11%;top:8%;width:65px;height:65px;border-radius:50%;background:#ffd76b;box-shadow:0 0 0 13px #ffd76b33,0 0 50px #ffd76b99;animation:pulse 2s infinite}@keyframes pulse{50%{transform:scale(1.1);box-shadow:0 0 0 21px #ffd76b22,0 0 70px #ffd76b88}}
+.bench{position:absolute;bottom:24px;width:100%;height:25px;background:linear-gradient(#9d795a,#74513b);box-shadow:0 7px 10px #33415522}
+.scene-title{position:absolute;left:18px;top:16px;background:#ffffffdf;border-radius:12px;padding:9px 12px;font-weight:850;box-shadow:0 4px 12px #25385816;z-index:5}
+.lab{position:relative;z-index:2;display:flex;align-items:flex-end;gap:clamp(12px,4vw,48px);height:260px}
+.tube{width:58px;height:185px;border:4px solid #8ba8c0;border-top:6px solid #7393ad;border-radius:10px 10px 22px 22px;background:linear-gradient(90deg,#ffffff99,#ffffff20 40%,#ffffff88);position:relative;overflow:hidden;box-shadow:inset 6px 0 9px #fff9,5px 8px 12px #2b456022}
+.liquid{position:absolute;bottom:0;left:0;right:0;height:62%;background:linear-gradient(90deg,#ff739288,#ffb4bd);border-top:2px solid #fff9;transition:background .8s,height .8s}
+.tube.b{height:205px}.tube.b .liquid{background:linear-gradient(90deg,#b9a2ff,#7543cb)}
+.flask{width:145px;height:180px;position:relative;margin-bottom:0}
+.flask-neck{position:absolute;left:54px;top:0;width:38px;height:62px;border:4px solid #8ba8c0;border-bottom:0;border-radius:7px 7px 0 0;background:#ffffff55}
+.flask-body{position:absolute;left:5px;bottom:0;width:135px;height:135px;border:4px solid #8ba8c0;border-radius:18px 18px 55px 55px;background:linear-gradient(90deg,#ffffff9c,#ffffff22 45%,#ffffff9c);overflow:hidden;box-shadow:inset 8px 0 10px #fff9,7px 8px 15px #2b456022}
+.flask-liquid{position:absolute;bottom:0;left:0;right:0;height:57%;background:linear-gradient(90deg,#f3a0cb,#ed4d9b);transition:background .8s}
+.dropper{position:absolute;right:18%;top:19%;width:22px;height:125px;transform:rotate(15deg);z-index:4}
+.dropper:before{content:"";position:absolute;top:0;left:0;width:22px;height:35px;background:#f08b72;border-radius:12px 12px 5px 5px}
+.dropper:after{content:"";position:absolute;top:32px;left:6px;width:10px;height:90px;background:linear-gradient(90deg,#b8d9eb,#fff,#8bb3cf);border:1px solid #829eb2}
+.drop{position:absolute;top:145px;left:7px;width:10px;height:15px;background:#f28cae;border-radius:60% 40% 60% 60%;animation:fall 1.1s infinite}@keyframes fall{0%{transform:translateY(-10px);opacity:0}30%{opacity:1}100%{transform:translateY(95px);opacity:0}}
+.bubble{position:absolute;border-radius:50%;background:#fff9;border:1px solid #fff;animation:rise 2.8s infinite ease-in}
+@keyframes rise{0%{transform:translateY(15px) scale(.6);opacity:0}30%{opacity:.9}100%{transform:translateY(-100px) scale(1.2);opacity:0}}
+.b1{width:10px;height:10px;left:25%;bottom:25%}.b2{width:7px;height:7px;left:55%;bottom:18%;animation-delay:.8s}.b3{width:13px;height:13px;left:70%;bottom:20%;animation-delay:1.4s}
+.label{position:absolute;bottom:-27px;left:50%;transform:translateX(-50%);font-weight:850;font-size:.83rem;white-space:nowrap;background:#ffffffdf;padding:3px 8px;border-radius:8px}
+.indicator-strip{position:absolute;left:3%;right:3%;bottom:9px;display:flex;justify-content:space-between;gap:8px;font-size:.78rem;font-weight:800;color:#52657c;z-index:3}
+.copy{padding:15px 4px 2px}.copy h2{margin:5px 0}.copy p{font-size:1.02rem;line-height:1.6}.fact{background:#f3ebff;border-left:5px solid var(--purple);padding:11px 13px;border-radius:12px;color:#51347d;font-weight:650}
+.progress{height:9px;border-radius:20px;background:#e8def5;overflow:hidden;margin:15px 0}.progress span{display:block;height:100%;width:25%;background:linear-gradient(90deg,#7136c8,#d34ed0);transition:width .35s}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.controls button{flex:1;min-width:125px;border:0;border-radius:12px;padding:12px 14px;font:inherit;font-weight:850;background:linear-gradient(100deg,#7136c8,#a34ce0);color:white;cursor:pointer}.controls .soft{background:#f0e8fb;color:#4e2b83;border:1px solid #ddcef3}.safety{background:#fff5df;border-left:5px solid #f1ae29;border-radius:13px;padding:14px;line-height:1.55}.key{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}.key div{background:#f8f5ff;border:1px solid #e8ddf7;border-radius:13px;padding:12px}.key b{color:#6935b2}
+@media(max-width:600px){.stage{height:330px}.lab{transform:scale(.8);transform-origin:bottom center;gap:13px}.window{width:28%}.heroicon{font-size:3rem}.indicator-strip{font-size:.68rem}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style></head><body>
+<header><div class="wrap hero"><div><div class="eyebrow">EXPERIMENTAL ODYSSEY • GRADE VII • CHAPTER 04</div><h1>🧪 Acids, Bases &amp; Salts</h1><p>Animated lab journey: indicators, colour changes and neutralisation</p></div><div class="heroicon" aria-hidden="true">⚗️</div></div></header>
+<main class="wrap">
+<section class="panel">
+<div class="topline"><span class="pill" id="sceneNo">SCENE 1 OF 5</span><span class="pill">🔊 Audio narration</span><span class="pill">Animated virtual demonstration</span></div>
+<div class="stage" id="stage">
+<div class="window"></div><div class="sun"></div><div class="scene-title" id="sceneLabel">A colourful indicator lab</div>
+<div class="lab" id="lab">
+<div class="tube"><div class="liquid" id="liq1"></div><span class="label">Lemon</span></div>
+<div class="tube b"><div class="liquid" id="liq2"></div><span class="label">Soap</span></div>
+<div class="flask"><div class="flask-neck"></div><div class="flask-body"><div class="flask-liquid" id="flaskLiquid"></div><i class="bubble b1"></i><i class="bubble b2"></i><i class="bubble b3"></i></div><span class="label">Reaction flask</span></div>
+</div><div class="dropper" id="dropper"><i class="drop"></i></div><div class="bench"></div>
+<div class="indicator-strip"><span id="leftCaption">Acidic sample</span><span id="rightCaption">Basic sample</span></div>
+</div>
+<div class="progress"><span id="progress"></span></div>
+<div class="copy"><h2 id="heading">1. Meet the indicators</h2><p id="description">Indicators are substances that change colour in acidic and basic solutions. We can use them to test everyday liquids safely.</p><div class="fact" id="fact">Key idea: indicators help us identify whether a liquid is acidic, basic or neutral.</div></div>
+<div class="controls"><button class="soft" onclick="previousScene()">← Previous</button><button onclick="nextScene()">Next scene →</button><button class="soft" onclick="listen()">🔊 Listen</button><button class="soft" onclick="stopAudio()">■ Stop</button></div>
+</section>
+<section class="panel"><h2>🔎 Remember these indicator clues</h2><div class="key">
+<div><b>Acids</b><br>Blue litmus turns red. Turmeric stays yellow.</div>
+<div><b>Bases</b><br>Red litmus turns blue. Turmeric turns red-brown.</div>
+<div><b>Neutral liquids</b><br>Litmus shows no change. Turmeric stays yellow.</div>
+<div><b>Red cabbage juice</b><br>Acid → pink/red; neutral → purple; base → blue/green.</div>
+</div></section>
+<div class="safety"><b>⚠️ Safety first:</b> Never taste laboratory liquids. Dilute HCl and NaOH must be teacher-prepared and handled with goggles and gloves. Rinse spills with plenty of water and tell your teacher. This animation is a learning model, not a replacement for supervised practical work.</div>
+</main>
+<script>
+const scenes=[
+{title:'A colourful indicator lab',heading:'1. Meet the indicators',desc:'Indicators are substances that change colour in acidic and basic solutions. We can use them to test everyday liquids safely.',fact:'Key idea: indicators help us identify whether a liquid is acidic, basic or neutral.',voice:'Indicators are substances that change colour in acidic and basic solutions. They help us identify whether a liquid is acidic, basic or neutral.',left:'Everyday liquids',right:'Indicator colours',l1:'#ef536c',l2:'#22ae78',flask:'#8e5acb',drop:false},
+{title:'Test with litmus and turmeric',heading:'2. Test the liquids',desc:'Put a drop of each liquid on red litmus, blue litmus and turmeric paper. Lemon juice is acidic; soap solution is basic; tap water is neutral.',fact:'Acid: blue litmus turns red. Base: red litmus turns blue. Turmeric turns red-brown in a base.',voice:'Test each liquid with red litmus, blue litmus and turmeric paper. Lemon juice is acidic, soap solution is basic, and tap water is neutral.',left:'Lemon juice • acid',right:'Soap solution • base',l1:'#f04470',l2:'#20ae76',flask:'#5b91df',drop:false},
+{title:'Red cabbage colour rainbow',heading:'3. Add red cabbage indicator',desc:'Add 2 mL of red cabbage juice to 2 mL of each liquid in separate test tubes. Compare the colours with the pH colour strip.',fact:'Acidic samples become pink or red, neutral samples stay purple, and basic samples shift towards blue or green.',voice:'Add red cabbage juice to each liquid in a separate test tube. Compare the colours with the pH colour strip. Acidic samples become pink or red, neutral samples purple, and basic samples blue or green.',left:'Acid → pink/red',right:'Base → blue/green',l1:'#f04470',l2:'#23ae77',flask:'#8a55c6',drop:true},
+{title:'Phenolphthalein turns pink',heading:'4. Prepare the pink solution',desc:'In the teacher-led demonstration, dilute sodium hydroxide is placed in a conical flask and two drops of phenolphthalein are added. The solution turns pink.',fact:'Phenolphthalein is pink in a basic solution and colourless when the solution is neutral or acidic.',voice:'In the teacher-led demonstration, two drops of phenolphthalein are added to dilute sodium hydroxide. The solution turns pink.',left:'NaOH + indicator',right:'Pink colour appears',l1:'#d6b5ff',l2:'#f05ba5',flask:'#ed4d9b',drop:true},
+{title:'Neutralisation: pink disappears',heading:'5. Add acid drop by drop',desc:'Dilute hydrochloric acid is added drop by drop while swirling the flask. When the pink just disappears, the solution is neutral. The temperature may rise slightly: the manual records 28 to 31 °C.',fact:'Acid + base → salt + water + a little heat. Here: HCl + NaOH → NaCl + H₂O.',voice:'Dilute hydrochloric acid is added drop by drop while swirling the flask. When the pink just disappears, the solution is neutral. The temperature may rise slightly. Acid plus base forms salt and water and releases a little heat.',left:'Pink solution',right:'Colourless • neutral',l1:'#f1a3c4',l2:'#d8e9f2',flask:'#dbe8ef',drop:true}
+];
+let index=0;
+function render(){const s=scenes[index];document.getElementById('sceneNo').textContent=`SCENE ${index+1} OF ${scenes.length}`;document.getElementById('sceneLabel').textContent=s.title;document.getElementById('heading').textContent=s.heading;document.getElementById('description').textContent=s.desc;document.getElementById('fact').textContent=s.fact;document.getElementById('leftCaption').textContent=s.left;document.getElementById('rightCaption').textContent=s.right;document.getElementById('liq1').style.background=s.l1;document.getElementById('liq2').style.background=s.l2;document.getElementById('flaskLiquid').style.background=s.flask;document.getElementById('dropper').style.display=s.drop?'block':'none';document.getElementById('progress').style.width=((index+1)/scenes.length*100)+'%';}
+function nextScene(){index=(index+1)%scenes.length;render()}function previousScene(){index=(index-1+scenes.length)%scenes.length;render()}
+function listen(){if(!('speechSynthesis'in window)){alert('Audio narration is not supported in this browser. Try Chrome.');return}stopAudio();let u=new SpeechSynthesisUtterance(scenes[index].voice);u.lang='en-IN';u.rate=.93;u.pitch=1.04;speechSynthesis.speak(u)}
+function stopAudio(){if('speechSynthesis'in window)speechSynthesis.cancel()}
+render();
+</script></body></html>

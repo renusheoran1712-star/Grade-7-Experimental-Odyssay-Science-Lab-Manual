@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Experimental Odyssey | Experiment 04 Virtual Lab</title>
+<style>
+:root{--purple:#7136c8;--violet:#a34ce0;--ink:#172b4d;--muted:#60738c;--line:#e5d9f4;--acid:#ee4772;--base:#1eaa76;--gold:#f4b52e}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;color:var(--ink);background:radial-gradient(circle at 5% 0%,#f1e8ff,transparent 32%),linear-gradient(135deg,#fff,#f7f2ff 60%,#eaf9ff);line-height:1.5}
+header{padding:25px 18px 28px;color:#fff;background:linear-gradient(115deg,#32106d,#7136c8 55%,#b04be2);position:relative;overflow:hidden}header:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:#ffffff18;right:-70px;top:-145px}
+.wrap{max-width:1080px;margin:auto;padding:18px}.hero{display:flex;align-items:center;justify-content:space-between;gap:15px}.eyebrow{letter-spacing:2px;font-size:.75rem;font-weight:850;color:#f4dfff}.hero h1{font-size:clamp(1.8rem,5vw,2.8rem);line-height:1.1;margin:8px 0}.hero p{margin:6px 0;color:#f2eaff;max-width:700px}.heroicon{font-size:4.4rem;filter:drop-shadow(0 8px 12px #1b063b55);animation:float 3s ease-in-out infinite}@keyframes float{50%{transform:translateY(-8px) rotate(4deg)}}
+.card{background:#ffffffed;border:1px solid var(--line);border-radius:21px;padding:19px;margin:17px 0;box-shadow:0 13px 32px #45216d10}.card h2{margin:0 0 12px;font-size:1.25rem}.badge{display:inline-block;background:#f0e5ff;color:#6330a9;border-radius:50px;padding:5px 10px;font-size:.78rem;font-weight:850}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:13px}.field{background:#faf7ff;border:1px solid #e8ddf7;border-radius:15px;padding:13px}.field label{display:block;font-weight:800;margin-bottom:7px}.field select{width:100%;padding:11px;border-radius:10px;border:1px solid #cfc0e4;background:white;color:var(--ink);font:inherit}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.actions button{flex:1;min-width:145px;border:0;border-radius:12px;padding:12px 14px;font:inherit;font-weight:850;background:linear-gradient(100deg,#7136c8,#a34ce0);color:white;cursor:pointer;box-shadow:0 5px 13px #7136c822}.actions button.secondary{background:#f0e8fb;color:#4f2c82;border:1px solid #ddcef3;box-shadow:none}
+.result{background:#f3edff;border-left:5px solid var(--purple);padding:14px;border-radius:13px;margin-top:14px;min-height:75px}
+.samples{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px}.sample{background:#fbf9ff;border:1px solid #e6dcf4;border-radius:15px;padding:13px;text-align:center}.sample h3{margin:3px 0 8px;font-size:1rem}.vial{height:116px;width:58px;margin:0 auto 9px;border:4px solid #8ba8c0;border-top:6px solid #7897b2;border-radius:9px 9px 20px 20px;position:relative;overflow:hidden;background:linear-gradient(90deg,#fff9,#ffffff22,#fff8);box-shadow:inset 6px 0 8px #fff9}.vial span{position:absolute;bottom:0;left:0;right:0;height:68%;background:var(--colour,#a48bd4);border-top:2px solid #fff9;transition:background .5s}.colourname{font-weight:850;font-size:.9rem}.small{font-size:.86rem;color:#61758b}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.legend div{padding:12px;border-radius:12px;background:#f8f4ff;border:1px solid #e7dcf5}.legend b{color:#6734b2}
+.neutral-lab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:center}.flaskarea{background:linear-gradient(#eaf7ff,#f5f1ff);border-radius:17px;min-height:250px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.flask{width:150px;height:190px;position:relative}.neck{position:absolute;top:0;left:55px;width:40px;height:65px;border:4px solid #8ba8c0;border-bottom:0;border-radius:8px 8px 0 0;background:#ffffff88}.bodyflask{position:absolute;bottom:0;left:4px;width:142px;height:140px;border:4px solid #8ba8c0;border-radius:17px 17px 55px 55px;background:linear-gradient(90deg,#fff9,#ffffff22,#fff9);overflow:hidden;box-shadow:inset 8px 0 10px #fff9}.fluid{position:absolute;bottom:0;left:0;right:0;height:57%;background:linear-gradient(90deg,#f8a3ca,#e94798);transition:background .65s}.bubbles i{position:absolute;width:9px;height:9px;border-radius:50%;background:#ffffffad;bottom:15%;animation:rise 2.5s infinite}.bubbles i:nth-child(1){left:25%}.bubbles i:nth-child(2){left:55%;animation-delay:.8s}.bubbles i:nth-child(3){left:73%;animation-delay:1.3s}@keyframes rise{to{transform:translateY(-75px);opacity:0}}
+.thermo{position:absolute;right:13%;top:18%;height:145px;width:24px;border:3px solid #829db4;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 3px #e9f3f9}.thermo:before{content:"";position:absolute;bottom:7px;left:6px;width:6px;height:90px;background:#e74c76;border-radius:5px}.thermo:after{content:"";position:absolute;bottom:-13px;left:1px;width:17px;height:17px;border-radius:50%;background:#e74c76}
+.readout{font-size:1.5rem;font-weight:900;color:#6330a9}.temp{background:#f5f0ff;border-radius:13px;padding:12px;margin-top:10px}.quiz{padding:13px;background:#f8f5ff;border:1px solid #e7def5;border-radius:13px;margin:10px 0}.quiz label{display:block;font-weight:500;margin:6px 0}.quiz input{accent-color:#7136c8}.warning{background:#fff5df;border-left:5px solid #f1ae29;padding:14px;border-radius:12px}.foot{text-align:center;color:#65788f;font-size:.86rem;padding:20px}
+@media(max-width:650px){.neutral-lab{grid-template-columns:1fr}.heroicon{font-size:3rem}.wrap{padding:12px}.card{padding:15px}}
+</style></head><body>
+<header><div class="wrap hero"><div><div class="eyebrow">EXPERIMENTAL ODYSSEY • GRADE VII • CHAPTER 04</div><h1>04 · Acids, Bases &amp; Salts</h1><p>Explore everyday liquids with indicators and discover neutralisation in a virtual lab.</p><span class="badge">Interactive virtual experiment</span></div><div class="heroicon" aria-hidden="true">🧪</div></div></header>
+<main class="wrap">
+<section class="card"><h2>🎧 Listen &amp; learn</h2><p id="intro">Acids taste sour and turn blue litmus red. Bases feel soapy and turn red litmus blue. Indicators such as litmus, turmeric and red cabbage juice change colour in acids and bases.</p><div class="actions"><button onclick="speak(introText)">🔊 Listen to introduction</button><button class="secondary" onclick="stopVoice()">■ Stop audio</button></div><p class="small">Audio uses your browser or device speech voice. If you do not hear it, check the volume and browser support.</p></section>
+
+<section class="card"><h2>🧫 Part A · Test everyday liquids</h2><p class="small">Choose a sample and an indicator. The colour result is a simplified learning model based on the lab manual.</p>
+<div class="grid">
+<div class="field"><label for="liquid">Choose a liquid</label><select id="liquid"><option value="lemon">Lemon juice</option><option value="vinegar">Vinegar</option><option value="soap">Soap solution</option><option value="baking">Baking-soda solution</option><option value="water">Tap water</option></select></div>
+<div class="field"><label for="indicator">Choose an indicator</label><select id="indicator"><option value="blue">Blue litmus paper</option><option value="red">Red litmus paper</option><option value="turmeric">Turmeric paper</option><option value="cabbage">Red cabbage juice</option></select></div>
+</div>
+<div class="actions"><button onclick="testLiquid()">▶ Test sample</button><button class="secondary" onclick="resetLiquid()">↻ Reset</button><button class="secondary" onclick="readLiquid()">🔊 Read result</button></div>
+<div class="samples">
+<div class="sample"><h3>Test sample</h3><div class="vial"><span id="sampleColour" style="--colour:linear-gradient(90deg,#f4c26e,#e6a84d)"></span></div><div id="sampleName" class="colourname">Lemon juice</div><div class="small" id="sampleNature">Awaiting test</div></div>
+<div class="sample"><h3>Indicator result</h3><div class="vial"><span id="indicatorColour" style="--colour:#e5c84d"></span></div><div id="indicatorName" class="colourname">Awaiting test</div><div class="small" id="indicatorExplain">Choose an indicator to begin</div></div>
+</div><div id="liquidResult" class="result" aria-live="polite">Select a liquid and indicator, then press Test sample.</div>
+</section>
+
+<section class="card"><h2>🌈 Red cabbage indicator · Compare the colour rainbow</h2><div class="legend">
+<div><b>Acidic</b><br><span style="color:#e83f69;font-weight:850">Pink / red</span><br><span class="small">Lemon juice and vinegar</span></div>
+<div><b>Neutral</b><br><span style="color:#8556b9;font-weight:850">Purple</span><br><span class="small">Tap water</span></div>
+<div><b>Basic</b><br><span style="color:#219d78;font-weight:850">Blue / green</span><br><span class="small">Soap and baking-soda solutions</span></div>
+</div></section>
+
+<section class="card"><h2>⚗️ Part B · Watch neutralisation</h2><p class="small">Model the teacher-led procedure: phenolphthalein makes dilute NaOH pink; dilute HCl is added drop by drop until the pink just disappears.</p>
+<div class="neutral-lab"><div class="flaskarea"><div class="flask"><div class="neck"></div><div class="bodyflask"><div id="neutralFluid" class="fluid"></div><div class="bubbles"><i></i><i></i><i></i></div></div></div><div class="thermo"></div></div>
+<div><div class="field"><label for="drops">Add dilute HCl drops (virtual)</label><input id="drops" type="range" min="0" max="10" value="0" oninput="updateDrops(this.value)" style="width:100%;accent-color:#7136c8"><div class="small">Drops added: <b id="dropCount">0</b> / 10</div></div>
+<div class="temp"><div class="small">Indicator colour</div><div class="readout" id="pinkState">Deep pink</div><div class="small">Model temperature</div><div class="readout" id="temperature">28 °C</div></div>
+<div class="actions"><button onclick="addDrop()">＋ Add one drop</button><button class="secondary" onclick="resetNeutral()">↻ Reset flask</button><button class="secondary" onclick="speakNeutral()">🔊 Explain</button></div></div></div>
+<div id="neutralResult" class="result" aria-live="polite">The flask contains dilute NaOH and phenolphthalein. It is pink because the solution is basic. Add virtual acid drops to approach neutralisation.</div>
+</section>
+
+<section class="card"><h2>🧠 Quick check</h2>
+<div class="quiz"><b>1. What happens to blue litmus in an acid?</b><label><input type="radio" name="q1" value="a"> It turns red</label><label><input type="radio" name="q1" value="b"> It turns green</label><label><input type="radio" name="q1" value="c"> No change in every acid</label></div>
+<div class="quiz"><b>2. What colour does turmeric turn in a base?</b><label><input type="radio" name="q2" value="a"> Blue</label><label><input type="radio" name="q2" value="b"> Red-brown</label><label><input type="radio" name="q2" value="c"> Colourless</label></div>
+<div class="quiz"><b>3. What are the products of HCl + NaOH?</b><label><input type="radio" name="q3" value="a"> Salt and water</label><label><input type="radio" name="q3" value="b"> Oxygen and hydrogen</label><label><input type="radio" name="q3" value="c"> Sugar and water</label></div>
+<div class="actions"><button onclick="checkQuiz()">Check answers</button><button class="secondary" onclick="resetQuiz()">Try again</button></div><div id="quizResult" class="result">Your score will appear here.</div></section>
+
+<section class="card"><h2>📘 Observation guide</h2><div class="legend">
+<div><b>Lemon juice</b><br>Blue litmus turns red; nature: acid.</div><div><b>Soap solution</b><br>Red litmus turns blue; turmeric turns red-brown; nature: base.</div><div><b>Tap water</b><br>Litmus shows no change; nature: neutral.</div><div><b>After neutralising</b><br>Litmus shows no change; the manual records 28 → 31 °C.</div>
+</div><p class="small">The manual's observation table also records: vinegar is acidic; baking-soda solution is basic. Your own practical observations may be entered in your notebook.</p></section>
+
+<div class="warning"><b>⚠️ Safety first:</b> This is a virtual model, not a replacement for the practical. Dilute HCl and NaOH can irritate skin and eyes and must be teacher-prepared. Wear goggles and gloves, rinse spills with plenty of water, and never taste any laboratory liquid. Follow your teacher's instructions.</div>
+</main><footer class="foot">Experimental Odyssey · Grade VII Science Lab Manual · Experiment 04 · Virtual learning model</footer>
+<script>
+const introText='Acids taste sour and turn blue litmus red. Bases feel soapy and turn red litmus blue. Indicators such as litmus, turmeric and red cabbage juice change colour in acids and bases. When an acid meets a base they neutralise each other, forming a salt and water, and the mixture warms slightly.';
+const data={
+lemon:{name:'Lemon juice',nature:'Acid',kind:'acid',liquid:'#f2bd61'},
+vinegar:{name:'Vinegar',nature:'Acid',kind:'acid',liquid:'#e9c98d'},
+soap:{name:'Soap solution',nature:'Base',kind:'base',liquid:'#56bd8d'},
+baking:{name:'Baking-soda solution',nature:'Base',kind:'base',liquid:'#8ac9bd'},
+water:{name:'Tap water',nature:'Neutral',kind:'neutral',liquid:'#8dc8e9'}
+};
+let lastLiquid='';
+function speak(t){if(!('speechSynthesis'in window)){alert('Audio is not supported by this browser. Try Chrome.');return}stopVoice();let u=new SpeechSynthesisUtterance(t);u.lang='en-IN';u.rate=.94;u.pitch=1.02;speechSynthesis.speak(u)}
+function stopVoice(){if('speechSynthesis'in window)speechSynthesis.cancel()}
+function testLiquid(){
+ const s=data[document.getElementById('liquid').value],ind=document.getElementById('indicator').value;
+ let colour='',name='',explain='';
+ if(ind==='blue'){colour=s.kind==='acid'?'#e94362':'#2876c9';name=s.kind==='acid'?'Turns red':s.kind==='base'?'No change':'No change';explain=s.kind==='acid'?'Blue litmus turns red in an acid.':'Blue litmus shows no change in this sample.'}
+ if(ind==='red'){colour=s.kind==='base'?'#2876c9':'#e84b68';name=s.kind==='base'?'Turns blue':'No change';explain=s.kind==='base'?'Red litmus turns blue in a base.':'Red litmus shows no change in this sample.'}
+ if(ind==='turmeric'){colour=s.kind==='base'?'#a84b32':'#e5c13e';name=s.kind==='base'?'Turns red-brown':'Stays yellow';explain=s.kind==='base'?'Turmeric turns red-brown in a base.':'Turmeric stays yellow in an acid or neutral sample.'}
+ if(ind==='cabbage'){colour=s.kind==='acid'?'#ed4773':s.kind==='base'?'#2fa77e':'#8555bd';name=s.kind==='acid'?'Pink / red':s.kind==='base'?'Blue / green':'Purple';explain='Red cabbage juice indicates the sample nature by its colour.'}
+ document.getElementById('sampleColour').style.background=s.liquid;document.getElementById('sampleName').textContent=s.name;document.getElementById('sampleNature').textContent=s.nature;
+ document.getElementById('indicatorColour').style.background=colour;document.getElementById('indicatorName').textContent=name;document.getElementById('indicatorExplain').textContent=explain;
+ lastLiquid=s.name+': '+name+'. '+explain+' The sample is '+s.nature.toLowerCase()+'.';
+ document.getElementById('liquidResult').textContent=lastLiquid;
+}
+function resetLiquid(){document.getElementById('liquid').value='lemon';document.getElementById('indicator').value='blue';document.getElementById('sampleColour').style.background='linear-gradient(90deg,#f4c26e,#e6a84d)';document.getElementById('sampleName').textContent='Lemon juice';document.getElementById('sampleNature').textContent='Awaiting test';document.getElementById('indicatorColour').style.background='#e5c84d';document.getElementById('indicatorName').textContent='Awaiting test';document.getElementById('indicatorExplain').textContent='Choose an indicator to begin';document.getElementById('liquidResult').textContent='Select a liquid and indicator, then press Test sample.';lastLiquid=''}
+function readLiquid(){speak(lastLiquid||'Choose a liquid and indicator, then test the sample.')}
+function updateDrops(v){let n=Number(v);document.getElementById('dropCount').textContent=n;let fluid=document.getElementById('neutralFluid');let temp=document.getElementById('temperature');let state=document.getElementById('pinkState');let msg=document.getElementById('neutralResult');
+ if(n<5){fluid.style.background='linear-gradient(90deg,#f4a2c7,#ec4b98)';state.textContent=n===0?'Deep pink':'Pink';temp.textContent='28 °C';msg.textContent='The solution is still basic and remains pink. Continue adding virtual dilute HCl drop by drop while swirling.'}
+ else if(n<8){fluid.style.background='linear-gradient(90deg,#efc5db,#e9a8cb)';state.textContent='Paler pink';temp.textContent='29 °C';msg.textContent='The pink colour is fading as acid is added. Continue carefully until the pink just disappears.'}
+ else{fluid.style.background='linear-gradient(90deg,#e8f4f7,#d4e8f0)';state.textContent='Colourless • neutral';temp.textContent='31 °C';msg.textContent='The pink has just disappeared in this simplified model: the solution is neutral. The manual records a temperature change from 28 °C to 31 °C.'}
+}
+function addDrop(){let r=document.getElementById('drops');r.value=Math.min(10,Number(r.value)+1);updateDrops(r.value)}
+function resetNeutral(){document.getElementById('drops').value=0;updateDrops(0)}
+function speakNeutral(){speak('Dilute sodium hydroxide with phenolphthalein is pink. Dilute hydrochloric acid is added drop by drop while swirling. When the pink just disappears, the solution is neutral. The manual records a temperature rise from 28 to 31 degrees Celsius.')}
+function checkQuiz(){let ans={q1:'a',q2:'b',q3:'a'},score=0;Object.keys(ans).forEach(q=>{if(document.querySelector('input[name='+q+']:checked')?.value===ans[q])score++});let msg='You scored '+score+' out of 3. '+(score===3?'Excellent work!': 'Review the indicator guide and neutralisation model, then try again.');document.getElementById('quizResult').textContent=msg;speak(msg)}
+function resetQuiz(){document.querySelectorAll('.quiz input').forEach(x=>x.checked=false);document.getElementById('quizResult').textContent='Your score will appear here.'}
+</script></body></html>
